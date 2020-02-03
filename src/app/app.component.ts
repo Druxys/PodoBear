@@ -41,9 +41,9 @@ export class AppComponent {
             icon  : "chatboxes"
           },
           {
-            title : "Contacts",
-            url   : "/contacts",
-            icon  : "contacts"
+            title : "Settings",
+            url   : "/settings",
+            icon  : "settings"
           },
         ]
   }
