@@ -7,6 +7,10 @@ const routes: Routes = [
     path: 'settings',
     loadChildren: () => import('./settings/settings.module').then( m => m.SettingsPageModule)
   },
+  {
+    path: 'browse',
+    loadChildren: () => import('./browse/browse.module').then( m => m.BrowsePageModule)
+  },
 
 ];
 
