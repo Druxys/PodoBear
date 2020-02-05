@@ -1,21 +1,24 @@
 <ion-app>
-  <ion-menu side="start" menuId="first" contentId="content1">
-    <ion-header>
-      <ion-toolbar color="primary">
-        <ion-title>Menu</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content color="primary">
-      <ion-list  >
-        <ion-menu-toggle auto-hide="true">
-          <ion-item *ngFor="let pages of navigate" color="primary" [routerLink]="pages.url" routerDirection="forward">
-            <ion-icon [name]="pages.icon" slot="start"></ion-icon>
-            {{pages.title}}
-          </ion-item>
-        </ion-menu-toggle>
-      </ion-list>
-    </ion-content>
-  </ion-menu>
-  <ion-router-outlet id="content1"></ion-router-outlet>
+    <ion-tabs>
+      <ion-tab-bar slot="home">
+        <ion-tab-button  tab="home">
+          <ion-icon name="home"></ion-icon>
+          <ion-label>Accueil</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button tab="heart">
+          <ion-icon name="heart"></ion-icon>
+          <ion-label>Parcourir</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button tab="settings">
+          <ion-icon name="settings"></ion-icon>
+          <ion-label>Paramètres</ion-label>
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
+
+
+    <ion-router-outlet id="content1"></ion-router-outlet>
 </ion-app>
 
