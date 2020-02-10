@@ -322,3 +322,5 @@ npm-debug.log*
 /www
 
 # End of https://www.gitignore.io/api/linux,macos,angular,windows,phpstorm+all,webstorm+all,jetbrains+all
+!/ios/
+!/android/
