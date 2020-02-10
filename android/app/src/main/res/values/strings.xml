@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">PodoBear</string>
+    <string name="title_activity_main">PodoBear</string>
+    <string name="package_name">com.podobear.app</string>
+    <string name="custom_url_scheme">com.podobear.app</string>
+</resources>

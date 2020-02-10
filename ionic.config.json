@@ -1,5 +1,7 @@
 {
-  "name": "myApp",
-  "integrations": {},
+  "name": "PodoBear",
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "angular"
 }
