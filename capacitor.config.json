@@ -1,8 +1,9 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "myApp",
+  "appId": "com.podobear.app",
+  "appName": "podobear",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
-  "cordova": {}
+  "cordova": {},
+  "windowsAndroidStudioPath": "C:\\Users\\PC\\AppData\\Local\\JetBrains\\Toolbox\\apps\\AndroidStudio\\ch-0\\191.6010548\\bin\\studio64.exe"
 }

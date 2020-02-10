@@ -1,0 +1,8 @@
+{
+  "appId": "com.podobear.app",
+  "appName": "PodoBear",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "cordova": {}
+}

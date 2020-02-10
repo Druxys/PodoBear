@@ -1,14 +1,22 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
     <ion-title>
-      Ionic Blank
+      PodoBear
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="ion-padding">
-    The world is your oyster.
-    <p>If you get lost, the <a target="_blank" rel="noopener" href="https://ionicframework.com/docs/">docs</a> will be your guide.</p>
-  </div>
+<ion-content color="tertiary">
+  <ion-card color="light" class="welcome-card">
+    <ion-card-header>
+      <ion-card-subtitle>Number of Viewers per season for</ion-card-subtitle>
+      <ion-card-title>Game of Thrones</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <canvas #barChart></canvas>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
