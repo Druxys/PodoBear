@@ -23,7 +23,7 @@ export class HomePage implements OnInit {
   ngOnInit() {
     this.dataService.getDatas()
         .subscribe((res: any) => {
-          this.data = res.datas;
+          this.data = res;
           console.log(this.data)
     }, error => {
           console.log(error);
@@ -31,10 +31,12 @@ export class HomePage implements OnInit {
   }
 
   createBarChart() {
+    var limitDatas = this.data.length;
     var datasArray = [];
     var i;
-    for (i = 0; i <= this.data.length; i++) {
-      datasArray[i] = this.data[i].positionX;
+    for (i = 0; i <= limitDatas; i++) {
+      datasArray[i] = this.data.i.positionX;
+      console.log(datasArray);
     }
 
     this.bars = new Chart(this.barChart.nativeElement, {

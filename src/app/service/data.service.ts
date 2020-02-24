@@ -6,11 +6,11 @@ import { Data } from "../model/data";
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
-      .append('Access-Control-Allow-Origin', '*')
       .append('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization,  X-Auth')
+      .append('Access-Control-Allow-Origin', '*')
       .append('Access-Control-Allow-Methods', 'GET')
 };
-const apiUrl = 'localhost:3000/datas';
+const apiUrl = 'http://185.216.25.16:5000/datas';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +32,7 @@ export class DataService {
 
   getDatas(): Observable<Data[]> {
     const url = `${apiUrl}/`;
-    return this.http.get<Data[]>(url, httpOptions)
+    return this.http.get<Data[]>(url)
         .pipe(
             tap(datas => console.log('fetched datas')),
             catchError(this.handleError('getDatas', []))
