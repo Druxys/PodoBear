@@ -6,7 +6,9 @@ import { Data } from "../model/data";
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
-      .set('Access-Control-Allow-Origin', '*')
+      .append('Access-Control-Allow-Origin', '*')
+      .append('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization,  X-Auth')
+      .append('Access-Control-Allow-Methods', 'GET')
 };
 const apiUrl = 'localhost:3000/datas';
 
@@ -30,7 +32,7 @@ export class DataService {
 
   getDatas(): Observable<Data[]> {
     const url = `${apiUrl}/`;
-    return this.http.get<Data[]>(apiUrl)
+    return this.http.get<Data[]>(url, httpOptions)
         .pipe(
             tap(datas => console.log('fetched datas')),
             catchError(this.handleError('getDatas', []))
