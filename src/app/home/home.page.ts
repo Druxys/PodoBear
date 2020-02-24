@@ -1,4 +1,5 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {DataService} from "../service/data.service";
 import { Chart } from 'chart.js';
 
 @Component({
@@ -6,19 +7,36 @@ import { Chart } from 'chart.js';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit {
   // @ts-ignore
   @ViewChild('barChart') barChart;
 
+  data;
   bars: any;
   colorArray: any;
-  constructor() { }
+  constructor(private dataService: DataService) { }
 
   ionViewDidEnter() {
     this.createBarChart();
   }
 
+  ngOnInit() {
+    this.dataService.getDatas()
+        .subscribe((res: any) => {
+          this.data = res.datas;
+          console.log(this.data)
+    }, error => {
+          console.log(error);
+        })
+  }
+
   createBarChart() {
+    var datasArray = [];
+    var i;
+    for (i = 0; i <= this.data.length; i++) {
+      datasArray[i] = this.data[i].positionX;
+    }
+
     this.bars = new Chart(this.barChart.nativeElement, {
       type: 'bar',
       data: {
