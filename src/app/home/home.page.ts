@@ -34,8 +34,8 @@ export class HomePage implements OnInit {
     var limitDatas = this.data.length;
     var datasArray = [];
     var i;
-    for (i = 0; i <= limitDatas; i++) {
-      datasArray[i] = this.data.i.positionX;
+    for (i = 0; i < limitDatas; i++) {
+      datasArray[i] = this.data[i].positionX;
       console.log(datasArray);
     }
 
@@ -45,7 +45,7 @@ export class HomePage implements OnInit {
         labels: ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8'],
         datasets: [{
           label: 'Viewers in millions',
-          data: [2.5, 3.8, 5, 6.9, 6.9, 7.5, 20, 35],
+          data: datasArray,
           backgroundColor: 'rgb(38, 194, 129)', // array should have same number of elements as number of dataset
           borderColor: 'rgb(38, 194, 129)',// array should have same number of elements as number of dataset
           borderWidth: 1
