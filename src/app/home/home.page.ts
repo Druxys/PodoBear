@@ -1,45 +1,45 @@
 import {Component, ViewChild} from '@angular/core';
-import { Chart } from 'chart.js';
+import {Chart} from 'chart.js';
+import {draw, generate} from 'patternomaly'
 
 @Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+    selector: 'app-home',
+    templateUrl: 'home.page.html',
+    styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  // @ts-ignore
-  @ViewChild('barChart') barChart;
+    // @ts-ignore
+    @ViewChild('barChart') barChart;
 
-  bars: any;
-  colorArray: any;
-  constructor() { }
+    bars: any;
+    colorArray: any;
 
-  ionViewDidEnter() {
-    this.createBarChart();
-  }
+    constructor() {
+    }
 
-  createBarChart() {
-    this.bars = new Chart(this.barChart.nativeElement, {
-      type: 'line',
-      data: {
-        labels: ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8'],
-        datasets: [{
-          label: 'Viewers in millions',
-          data: [2.5, 3.8, 5, 6.9, 6.9, 7.5, 20, 35],
-          backgroundColor: 'rgb(38, 194, 129)', // array should have same number of elements as number of dataset
-          borderColor: 'rgb(38, 194, 129)',// array should have same number of elements as number of dataset
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
-            }
-          }]
-        }
-      }
-    });
-  }
+    ionViewDidEnter() {
+        this.createBarChart();
+    }
+
+    createBarChart() {
+        this.bars = new Chart(this.barChart.nativeElement, {
+            type: 'doughnut',
+            data: {
+              labels: [
+                'Red',
+                'Yellow'
+              ],
+                datasets: [{
+                    data: [10, 30],
+                  backgroundColor: [
+                    '#5DAEB3', '#826251'
+                  ],
+                }],
+
+
+
+            },
+            options: {}
+        });
+    }
 }

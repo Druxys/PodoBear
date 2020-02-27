@@ -1,22 +1,58 @@
 <ion-header>
-  <ion-toolbar color="secondary">
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>
-      PodoBear
-    </ion-title>
-  </ion-toolbar>
+
 </ion-header>
 
-<ion-content color="tertiary">
-  <ion-card color="light" class="welcome-card">
-    <ion-card-header>
-      <ion-card-subtitle>Number of Viewers per season for</ion-card-subtitle>
-      <ion-card-title>Game of Thrones</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <canvas #barChart></canvas>
-    </ion-card-content>
-  </ion-card>
+<ion-content color="light">
+    <ion-card class="welcome-card">
+        <ion-card-header>
+            <ion-card-title>Game of Thrones</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <canvas #barChart></canvas>
+        </ion-card-content>
+    </ion-card>
+    <ion-card>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-row>
+                  <img src="./assets/images/fitness.svg" alt="icon" width="40" height="40">
+                </ion-row>
+              </ion-col>
+              <ion-col size="8">
+                <ion-row>
+                  <ion-text color="secondary" class="text-card">Nombres de pas</ion-text>
+                </ion-row>
+                <ion-row>
+                  <ion-text> <span style="font-weight: bolder">1080</span> pas</ion-text>
+                </ion-row>
+              </ion-col>
+
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+    </ion-card>
+    <ion-card>
+        <ion-card-content>
+            <ion-grid>
+                <ion-row>
+                    <ion-col>
+                        <ion-row>
+                            <img src="./assets/images/flame.svg" alt="icon" width="40" height="40">
+                        </ion-row>
+                    </ion-col>
+                    <ion-col size="8">
+                        <ion-row>
+                            <ion-text color="secondary" class="text-card">Nombres de pas</ion-text>
+                        </ion-row>
+                        <ion-row>
+                            <ion-text> <span style="font-weight: bolder">1080</span> pas</ion-text>
+                        </ion-row>
+                    </ion-col>
+
+                </ion-row>
+            </ion-grid>
+        </ion-card-content>
+    </ion-card>
 </ion-content>
