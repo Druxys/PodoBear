@@ -1,0 +1,66 @@
+ion-title {
+  text-align: center;
+  font-family: "Arial Black", sans-serif;
+  z-index: 4567890;
+  margin-bottom: 5%;
+  font-size: 1.7em;
+}
+
+ion-grid {
+  margin-top: 100px;
+}
+
+img {
+  padding-bottom: 5%;
+}
+
+ion-header {
+margin-top: 15%;
+  position: absolute;
+}
+ion-header::after {
+  background-image: none;
+}
+
+
+ion-button {
+  margin-bottom: 10%;
+}
+
+.confirmSignUp {
+}
+
+div, ion-list {
+  background-color: #FFE8D1;
+}
+
+.login-page {
+
+  &_img {
+    margin-top: 2rem;
+  }
+}
+
+.form {
+
+  &_input {
+    color: rgba(51,51,51, .4);
+    margin-left: 1rem;
+  }
+
+  &_input:focus {
+    border-bottom: 1px solid red;
+  }
+}
+
+.signup-col {
+
+  p {
+    font-size: .8rem;
+  }
+
+  &_btn {
+    text-transform: uppercase;
+    font-size: .8rem;
+  }
+}
