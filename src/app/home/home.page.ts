@@ -1,6 +1,9 @@
 import {Component, ViewChild} from '@angular/core';
 import {Chart} from 'chart.js';
 import {draw, generate} from 'patternomaly'
+import {ModalController} from "@ionic/angular";
+import { StatStepPage } from '../stat-step/stat-step.page';
+
 
 @Component({
     selector: 'app-home',
@@ -14,7 +17,7 @@ export class HomePage {
     bars: any;
     colorArray: any;
 
-    constructor() {
+    constructor(public modalController : ModalController) {
     }
 
     ionViewDidEnter() {
@@ -26,8 +29,8 @@ export class HomePage {
             type: 'doughnut',
             data: {
               labels: [
-                'Red',
-                'Yellow'
+                'Actif',
+                'Inactif'
               ],
                 datasets: [{
                     data: [10, 30],
@@ -42,4 +45,12 @@ export class HomePage {
             options: {}
         });
     }
+
+    async openModal() {
+        const modal = await this.modalController.create({
+            component: StatStepPage,
+        });
+        return await modal.present();
+    }
+
 }

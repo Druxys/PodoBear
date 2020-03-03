@@ -5,32 +5,33 @@
 <ion-content color="light">
     <ion-card class="welcome-card">
         <ion-card-header>
-            <ion-card-title>Game of Thrones</ion-card-title>
+            <ion-card-title>Activités</ion-card-title>
         </ion-card-header>
         <ion-card-content>
             <canvas #barChart></canvas>
         </ion-card-content>
     </ion-card>
+    <ion-title>Points clés</ion-title>
     <ion-card>
-        <ion-card-content>
-          <ion-grid>
-            <ion-row>
-              <ion-col>
+        <ion-card-content  (click)="openModal()">
+            <ion-grid>
                 <ion-row>
-                  <img src="./assets/images/fitness.svg" alt="icon" width="40" height="40">
-                </ion-row>
-              </ion-col>
-              <ion-col size="8">
-                <ion-row>
-                  <ion-text color="secondary" class="text-card">Nombres de pas</ion-text>
-                </ion-row>
-                <ion-row>
-                  <ion-text> <span style="font-weight: bolder">1080</span> pas</ion-text>
-                </ion-row>
-              </ion-col>
+                    <ion-col>
+                        <ion-row>
+                            <img alt="icon" height="40" src="./assets/images/foot.svg" width="40">
+                        </ion-row>
+                    </ion-col>
+                    <ion-col size="8">
+                        <ion-row>
+                            <ion-text class="text-card" color="secondary">Nombres de pas</ion-text>
+                        </ion-row>
+                        <ion-row>
+                            <ion-text><span style="font-weight: bolder">1080</span> pas</ion-text>
+                        </ion-row>
+                    </ion-col>
 
-            </ion-row>
-          </ion-grid>
+                </ion-row>
+            </ion-grid>
         </ion-card-content>
     </ion-card>
     <ion-card>
@@ -39,15 +40,37 @@
                 <ion-row>
                     <ion-col>
                         <ion-row>
-                            <img src="./assets/images/flame.svg" alt="icon" width="40" height="40">
+                            <img alt="icon" height="40" src="./assets/images/flame.svg" width="40">
                         </ion-row>
                     </ion-col>
                     <ion-col size="8">
                         <ion-row>
-                            <ion-text color="secondary" class="text-card">Nombres de pas</ion-text>
+                            <ion-text class="text-card" color="secondary">Calories perdues</ion-text>
                         </ion-row>
                         <ion-row>
-                            <ion-text> <span style="font-weight: bolder">1080</span> pas</ion-text>
+                            <ion-text><span style="font-weight: bolder">1080</span> pas</ion-text>
+                        </ion-row>
+                    </ion-col>
+
+                </ion-row>
+            </ion-grid>
+        </ion-card-content>
+    </ion-card>
+    <ion-card>
+        <ion-card-content>
+            <ion-grid>
+                <ion-row>
+                    <ion-col>
+                        <ion-row>
+                            <img alt="icon" height="40" src="./assets/images/ruler-filed.svg" width="40">
+                        </ion-row>
+                    </ion-col>
+                    <ion-col size="8">
+                        <ion-row>
+                            <ion-text class="text-card" color="secondary">Distance parcourue</ion-text>
+                        </ion-row>
+                        <ion-row>
+                            <ion-text><span style="font-weight: bolder">1080</span> pas</ion-text>
                         </ion-row>
                     </ion-col>
 
