@@ -33,16 +33,18 @@ export class HomePage implements OnInit {
   createBarChart() {
     var limitDatas = this.data.length;
     var datasArray = [];
+    var indexArray = [];
     var i;
     for (i = 0; i < limitDatas; i++) {
       datasArray[i] = this.data[i].positionX;
+      indexArray[i] = i;
       console.log(datasArray);
     }
 
     this.bars = new Chart(this.barChart.nativeElement, {
-      type: 'bar',
+      type: 'line',
       data: {
-        labels: ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8'],
+        labels: indexArray,
         datasets: [{
           label: 'Viewers in millions',
           data: datasArray,
