@@ -47,7 +47,10 @@ export class StatStepPage implements OnInit {
 
 
             },
-            options: {}
+            options: {
+                legend: {
+                    display: false
+                }}
         });
     }
 

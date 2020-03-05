@@ -3,6 +3,8 @@ import {Chart} from 'chart.js';
 import {draw, generate} from 'patternomaly'
 import {ModalController} from "@ionic/angular";
 import { StatStepPage } from '../stat-step/stat-step.page';
+import {StatDistPage} from "../stat-dist/stat-dist.page";
+import {SettingsPage} from "../settings/settings.page";
 
 
 @Component({
@@ -42,15 +44,31 @@ export class HomePage {
 
 
             },
-            options: {}
+            options: {
+                legend: {
+                    display: false
+                }}
         });
     }
 
-    async openModal() {
+    async openModalSteps() {
         const modal = await this.modalController.create({
             component: StatStepPage,
         });
         return await modal.present();
     }
 
+    async openModalDist() {
+        const modal = await this.modalController.create({
+            component: StatDistPage,
+        });
+        return await modal.present();
+    }
+
+    async openModalSettings() {
+        const modal = await this.modalController.create({
+            component: SettingsPage,
+        });
+        return await modal.present();
+    }
 }

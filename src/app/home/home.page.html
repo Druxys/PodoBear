@@ -3,6 +3,12 @@
 </ion-header>
 
 <ion-content color="light">
+    <div class="ion-button">
+        <ion-button routerLink="/settings">
+            <ion-icon  name="settings"></ion-icon>
+        </ion-button>
+    </div>
+    <span class="clear"></span>
     <ion-card class="welcome-card">
         <ion-card-header>
             <ion-card-title>Activités</ion-card-title>
@@ -13,7 +19,7 @@
     </ion-card>
     <ion-title>Points clés</ion-title>
     <ion-card>
-        <ion-card-content  (click)="openModal()">
+        <ion-card-content  (click)="openModalSteps()">
             <ion-grid>
                 <ion-row>
                     <ion-col>
@@ -57,7 +63,7 @@
         </ion-card-content>
     </ion-card>
     <ion-card>
-        <ion-card-content>
+        <ion-card-content  (click)="openModalDist()">
             <ion-grid>
                 <ion-row>
                     <ion-col>

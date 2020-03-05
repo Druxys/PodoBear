@@ -11,12 +11,13 @@ import { AppRoutingModule } from './app-routing.module';
 
 import  { StatStepPageModule } from "./stat-step/stat-step.module";
 import  { StatDistPageModule } from "./stat-dist/stat-dist.module";
+import {SettingsPageModule} from "./settings/settings.module";
 
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, StatStepPageModule, StatDistPageModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, StatStepPageModule, StatDistPageModule, SettingsPageModule],
   providers: [
     StatusBar,
     SplashScreen,
