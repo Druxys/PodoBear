@@ -291,4 +291,36 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+#Angular default .gitignore
+*~
+*.sw[mnpcod]
+.tmp
+*.tmp
+*.tmp.*
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+UserInterfaceState.xcuserstate
+$RECYCLE.BIN/
+
+*.log
+log.txt
+npm-debug.log*
+
+/.idea
+/.ionic
+/.sass-cache
+/.sourcemaps
+/.versions
+/.vscode
+/coverage
+/dist
+/node_modules
+/platforms
+/plugins
+/www
+
 # End of https://www.gitignore.io/api/linux,macos,angular,windows,phpstorm+all,webstorm+all,jetbrains+all
+!/ios/
+!/android/

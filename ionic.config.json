@@ -1,0 +1,7 @@
+{
+  "name": "PodoBear",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
