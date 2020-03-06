@@ -17,3 +17,28 @@
 .clear {
   *zoom: 1;
 }
+
+.center {
+  height: 100%
+}
+
+.your-activities {
+  color: #5DAEB3;
+  font-weight: bold
+}
+
+.their-activities {
+  color: #826251;
+  font-weight: bold
+}
+
+.center-title-resume {
+  text-align: center;
+  font-weight: bolder;
+  font-size: 1.2em;
+}
+
+.blocHome {
+  height: 200px;
+  background-color: #5DAEB3;
+  clip-path: polygon(0 0, 100% 0%, 100% 100%, 0 74%);}
