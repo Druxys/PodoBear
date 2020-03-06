@@ -16,7 +16,7 @@ export class StatStepPage implements OnInit {
     colorArray: any;
 
 
-    constructor(navParams: NavParams,public viewCtrl: ModalController) {
+    constructor(navParams: NavParams, public viewCtrl: ModalController) {
     }
 
     dismiss() {

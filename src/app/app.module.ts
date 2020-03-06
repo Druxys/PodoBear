@@ -9,9 +9,9 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import  { StatStepPageModule } from "./stat-step/stat-step.module";
-import  { StatDistPageModule } from "./stat-dist/stat-dist.module";
-import {SettingsPageModule} from "./settings/settings.module";
+import  { StatStepPageModule } from './stat-step/stat-step.module';
+import  { StatDistPageModule } from './stat-dist/stat-dist.module';
+import {SettingsPageModule} from './settings/settings.module';
 
 
 @NgModule({

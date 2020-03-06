@@ -1,13 +1,16 @@
 <ion-header>
+    <ion-toolbar>
+        <ion-title>Résumé</ion-title>
+        <ion-buttons slot="end">
+            <ion-button routerLink="/settings">
+                <ion-icon   name="settings"></ion-icon>
+            </ion-button>
 
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content color="light">
-    <div class="ion-button">
-        <ion-button routerLink="/settings">
-            <ion-icon  name="settings"></ion-icon>
-        </ion-button>
-    </div>
     <span class="clear"></span>
     <ion-card class="welcome-card">
         <ion-card-header>
@@ -19,7 +22,7 @@
     </ion-card>
     <ion-title>Points clés</ion-title>
     <ion-card>
-        <ion-card-content  (click)="openModalSteps()">
+        <ion-card-content (click)="openModalSteps()">
             <ion-grid>
                 <ion-row>
                     <ion-col>
@@ -63,7 +66,7 @@
         </ion-card-content>
     </ion-card>
     <ion-card>
-        <ion-card-content  (click)="openModalDist()">
+        <ion-card-content (click)="openModalDist()">
             <ion-grid>
                 <ion-row>
                     <ion-col>
