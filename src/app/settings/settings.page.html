@@ -4,30 +4,27 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>
-      Settings
+      Paramètres
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-list>
-    <ion-item>
-      <a routerLink="/sign-in">ici</a>
+    <ion-item routerLink="/sign-in">
+      <ion-label>Connexion</ion-label>
     </ion-item>
-    <ion-item component="page-tabs">
-      <ion-label>Pokémon Yellow</ion-label>
+    <ion-item routerLink="/sign-up">
+      <ion-label>Inscription</ion-label>
     </ion-item>
-    <ion-item>
-      <ion-label>Mega Man X</ion-label>
+    <ion-item routerLink="">
+      <ion-label>Supprimer le cache</ion-label>
     </ion-item>
-    <ion-item>
-      <ion-label>The Legend of Zelda</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>Pac-Man</ion-label>
+    <ion-item routerLink="">
+      <ion-label>Deconnexion</ion-label>
     </ion-item>
     <ion-item>
-      <ion-label>Super Mario World</ion-label>
+      <ion-label>Activer la géolocalisation</ion-label>
     </ion-item>
   </ion-list>
 </ion-content>

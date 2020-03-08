@@ -13,7 +13,13 @@
 <ion-content color="light">
     <div class="blocHome">
         <div class="center-title-resume">
-            <ion-text color="white">Bonjour!</ion-text>
+            <ion-text color="white">Bonjour!</ion-text><br>
+            <div class="counter">
+                <div class="step">
+                    <ion-text color="white">25</ion-text><br>
+                </div>
+                <ion-text color="white">pas</ion-text><br>
+            </div>
         </div>
     </div>
     <span class="clear"></span>
@@ -21,7 +27,7 @@
         <ion-card-header>
             <ion-card-title>Activités</ion-card-title>
             <ion-card-subtitle>Voici <span class="your-activities">votre activité</span> en fonction <span
-                    class="their-activities">des autres utilisateurs</span> ! Allez, bougez vous le cul!
+                    class="their-activities">des autres utilisateurs</span> ! Allez, bougez-vous le cul!
             </ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
@@ -59,7 +65,7 @@
         </ion-card-content>
     </ion-card>
     <ion-card>
-        <ion-card-content>
+        <ion-card-content (click)="openModalKal()">
             <ion-grid>
                 <ion-row>
                     <ion-col size="3">
