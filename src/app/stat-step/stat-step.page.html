@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header no-border>
   <ion-toolbar  color="primary">
     <ion-buttons slot="start">
       <ion-button (click)="dismiss()">Close</ion-button>
@@ -28,6 +28,9 @@
     </ion-card-content>
   </ion-card>
   <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>Le nombre de pas de la semaine dernière</ion-card-subtitle>
+    </ion-card-header>
     <canvas #barChart></canvas>
   </ion-card>
 
