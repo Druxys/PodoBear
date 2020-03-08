@@ -1,10 +1,10 @@
 import {Component, ViewChild} from '@angular/core';
 import {Chart} from 'chart.js';
-import {draw, generate} from 'patternomaly'
-import {ModalController} from "@ionic/angular";
+import {draw, generate} from 'patternomaly';
+import {ModalController} from '@ionic/angular';
 import { StatStepPage } from '../stat-step/stat-step.page';
-import {StatDistPage} from "../stat-dist/stat-dist.page";
-import {SettingsPage} from "../settings/settings.page";
+import {StatDistPage} from '../stat-dist/stat-dist.page';
+import {StatKalPage} from '../stat-kal/stat-kal.page';
 
 
 @Component({
@@ -19,7 +19,7 @@ export class HomePage {
     bars: any;
     colorArray: any;
 
-    constructor(public modalController : ModalController) {
+    constructor(public modalController: ModalController) {
     }
 
     ionViewDidEnter() {
@@ -65,9 +65,9 @@ export class HomePage {
         return await modal.present();
     }
 
-    async openModalSettings() {
+    async openModalKal() {
         const modal = await this.modalController.create({
-            component: SettingsPage,
+            component: StatKalPage,
         });
         return await modal.present();
     }

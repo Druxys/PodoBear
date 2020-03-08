@@ -27,6 +27,10 @@ const routes: Routes = [
     path: 'stat-dist',
     loadChildren: () => import('./stat-dist/stat-dist.module').then( m => m.StatDistPageModule)
   },
+  {
+    path: 'stat-kal',
+    loadChildren: () => import('./stat-kal/stat-kal.module').then( m => m.StatKalPageModule)
+  },
 
 ];
 

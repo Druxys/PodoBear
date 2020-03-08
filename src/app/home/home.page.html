@@ -1,55 +1,79 @@
-<ion-header>
+<ion-header no-border>
+    <ion-toolbar color="primary">
+        <ion-title>Résumé</ion-title>
+        <ion-buttons slot="end">
+            <ion-button routerLink="/settings">
+                <ion-icon name="settings"></ion-icon>
+            </ion-button>
 
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content color="light">
-    <div class="ion-button">
-        <ion-button routerLink="/settings">
-            <ion-icon  name="settings"></ion-icon>
-        </ion-button>
+    <div class="blocHome">
+        <div class="center-title-resume">
+            <ion-text color="white">Bonjour!</ion-text><br>
+            <div class="counter">
+                <div class="step">
+                    <ion-text color="white">25</ion-text><br>
+                </div>
+                <ion-text color="white">pas</ion-text><br>
+            </div>
+        </div>
     </div>
     <span class="clear"></span>
     <ion-card class="welcome-card">
         <ion-card-header>
             <ion-card-title>Activités</ion-card-title>
+            <ion-card-subtitle>Voici <span class="your-activities">votre activité</span> en fonction <span
+                    class="their-activities">des autres utilisateurs</span> ! Allez, bougez-vous le cul!
+            </ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
             <canvas #barChart></canvas>
         </ion-card-content>
     </ion-card>
-    <ion-title>Points clés</ion-title>
+    <div class="center-title-resume">
+        <ion-text>Points clés</ion-text>
+    </div>
     <ion-card>
-        <ion-card-content  (click)="openModalSteps()">
+        <ion-card-content (click)="openModalSteps()">
             <ion-grid>
                 <ion-row>
-                    <ion-col>
+                    <ion-col size="3">
                         <ion-row>
-                            <img alt="icon" height="40" src="./assets/images/foot.svg" width="40">
+                            <img alt="icon" height="100 %" src="./assets/images/foot.svg" width="100%">
                         </ion-row>
                     </ion-col>
-                    <ion-col size="8">
-                        <ion-row>
-                            <ion-text class="text-card" color="secondary">Nombres de pas</ion-text>
-                        </ion-row>
-                        <ion-row>
-                            <ion-text><span style="font-weight: bolder">1080</span> pas</ion-text>
-                        </ion-row>
-                    </ion-col>
+                    <ion-col size="7">
+                        <div class="center">
+                            <ion-row>
+                                <ion-text class="text-card" color="secondary">Nombres de pas</ion-text>
+                            </ion-row>
+                            <ion-row>
+                                <ion-text><span style="font-weight: bolder">1080</span> pas</ion-text>
+                            </ion-row>
+                        </div>
 
+                    </ion-col>
+                    <ion-col size="2">
+                        <img alt="icon" height="100 %" src="./assets/images/chevron-forward.svg" width="100%">
+                    </ion-col>
                 </ion-row>
             </ion-grid>
         </ion-card-content>
     </ion-card>
     <ion-card>
-        <ion-card-content>
+        <ion-card-content (click)="openModalKal()">
             <ion-grid>
                 <ion-row>
-                    <ion-col>
+                    <ion-col size="3">
                         <ion-row>
-                            <img alt="icon" height="40" src="./assets/images/flame.svg" width="40">
+                            <img alt="icon" height="100 %" src="./assets/images/flame.svg" width="100%">
                         </ion-row>
                     </ion-col>
-                    <ion-col size="8">
+                    <ion-col size="7">
                         <ion-row>
                             <ion-text class="text-card" color="secondary">Calories perdues</ion-text>
                         </ion-row>
@@ -57,21 +81,23 @@
                             <ion-text><span style="font-weight: bolder">1080</span> pas</ion-text>
                         </ion-row>
                     </ion-col>
-
+                    <ion-col size="2">
+                        <img alt="icon" height="100%" src="./assets/images/chevron-forward.svg" width="100%">
+                    </ion-col>
                 </ion-row>
             </ion-grid>
         </ion-card-content>
     </ion-card>
     <ion-card>
-        <ion-card-content  (click)="openModalDist()">
+        <ion-card-content (click)="openModalDist()">
             <ion-grid>
                 <ion-row>
-                    <ion-col>
+                    <ion-col size="3">
                         <ion-row>
-                            <img alt="icon" height="40" src="./assets/images/ruler-filed.svg" width="40">
+                            <img alt="icon" height="100%" src="./assets/images/golf.svg" width="100%">
                         </ion-row>
                     </ion-col>
-                    <ion-col size="8">
+                    <ion-col size="7">
                         <ion-row>
                             <ion-text class="text-card" color="secondary">Distance parcourue</ion-text>
                         </ion-row>
@@ -79,7 +105,9 @@
                             <ion-text><span style="font-weight: bolder">1080</span> pas</ion-text>
                         </ion-row>
                     </ion-col>
-
+                    <ion-col size="2">
+                        <img alt="icon" height="100%" src="./assets/images/chevron-forward.svg" width="100%">
+                    </ion-col>
                 </ion-row>
             </ion-grid>
         </ion-card-content>
