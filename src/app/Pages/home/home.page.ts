@@ -82,6 +82,7 @@ export class HomePage {
     this.maxY = 0;
     this.minZ = 0;
     this.maxZ = 0;
+    this.gyro();
 }
     ionViewDidEnter() {
         this.createBarChart();
@@ -134,9 +135,6 @@ export class HomePage {
     }
 
     gyro() {
-
-        document.getElementById('button').style.display = 'none';
-        document.getElementById('pseudoTXT').style.display = 'none';
 
         this.geolocation.getCurrentPosition().then((resp) => {}).catch((error) => {
             this.accuracy = 'error';
