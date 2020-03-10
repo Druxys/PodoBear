@@ -5,7 +5,7 @@
   "npmClient": "npm",
   "webDir": "www",
   "cordova": {},
-  "windowsAndroidStudioPath": "C:\\Users\\PC\\AppData\\Local\\JetBrains\\Toolbox\\apps\\AndroidStudio\\ch-0\\192.6241897\\bin\\studio64.exe",
+  "linuxAndroidStudioPath": "/snap/bin/android-studio",
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 3000,
@@ -13,7 +13,7 @@
       "backgroundColor": "#ffffffff",
       "androidSplashResourceName": "splash",
       "androidScaleType": "CENTER_CROP",
-      "androidSpinnedtgf,sj<tfenzsfbqcv sv-ikzfvacdr(yà_olguytfrberStyle": "large",
+      "androidSpinnerStyle": "large",
       "iosSpinnerStyle": "small",
       "spinnerColor": "#999999",
       "showSpinner": true
