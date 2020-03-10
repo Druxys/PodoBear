@@ -15,9 +15,10 @@ img {
 }
 
 ion-header {
-margin-top: 15%;
+  margin-top: 15%;
   position: absolute;
 }
+
 ion-header::after {
   background-image: none;
 }
@@ -43,7 +44,7 @@ div, ion-list {
 .form {
 
   &_input {
-    color: rgba(51,51,51, .4);
+    color: rgba(51, 51, 51, .4);
     margin-left: 1rem;
   }
 

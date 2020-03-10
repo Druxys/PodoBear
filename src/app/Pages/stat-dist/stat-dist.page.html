@@ -1,51 +1,52 @@
 <ion-header no-border>
-  <ion-toolbar  color="primary">
-    <ion-buttons slot="start">
-      <ion-button (click)="dismiss()">Close</ion-button>
-    </ion-buttons>
-    <ion-title>Distance parcourue</ion-title>
-  </ion-toolbar>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-button (click)="dismiss()">Close</ion-button>
+        </ion-buttons>
+        <ion-title>Distance parcourue</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
 
-  <ion-card>
-    <ion-card-header>
-      <ion-card-subtitle>Le nombre de pas d'hier était supérieur à celui d'avant-hier</ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-grid>
-        <ion-row>
-          <ion-text><span style="font-weight: bolder">1080</span> pas</ion-text>
-          <ion-progress-bar color="primary" value="0.5"></ion-progress-bar>
-        </ion-row>
-        <ion-row>
-          <ion-text><span style="font-weight: bolder">1080</span> pas</ion-text>
-          <ion-progress-bar color="secondary" value="0.5"></ion-progress-bar>
-        </ion-row>
-      </ion-grid>
-    </ion-card-content>
-  </ion-card>
-  <ion-card>
-    <canvas #barChart></canvas>
-  </ion-card>
+    <ion-card>
+        <ion-card-header>
+            <ion-card-subtitle>Le nombre de pas d'hier était supérieur à celui d'avant-hier</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-grid>
+                <ion-row>
+                    <ion-text><span style="font-weight: bolder">1080</span> pas</ion-text>
+                    <ion-progress-bar color="primary" value="0.5"></ion-progress-bar>
+                </ion-row>
+                <ion-row>
+                    <ion-text><span style="font-weight: bolder">1080</span> pas</ion-text>
+                    <ion-progress-bar color="secondary" value="0.5"></ion-progress-bar>
+                </ion-row>
+            </ion-grid>
+        </ion-card-content>
+    </ion-card>
+    <ion-card>
+        <canvas #barChart></canvas>
+    </ion-card>
 
-  <ion-card>
-    <ion-card-header>
-      <ion-card-subtitle>La semaine dernière, vous avez fait en moyenne moins de pas que la semaine précédente</ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-grid>
-        <ion-row>
-          <ion-text><span style="font-weight: bolder">1080</span> pas</ion-text>
-          <ion-progress-bar color="primary" value="0.5"></ion-progress-bar>
-        </ion-row>
-        <ion-row>
-          <ion-text><span style="font-weight: bolder">1080</span> pas</ion-text>
-          <ion-progress-bar color="secondary" value="0.5"></ion-progress-bar>
-        </ion-row>
-      </ion-grid>
-    </ion-card-content>
-  </ion-card>
+    <ion-card>
+        <ion-card-header>
+            <ion-card-subtitle>La semaine dernière, vous avez fait en moyenne moins de pas que la semaine précédente
+            </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-grid>
+                <ion-row>
+                    <ion-text><span style="font-weight: bolder">1080</span> pas</ion-text>
+                    <ion-progress-bar color="primary" value="0.5"></ion-progress-bar>
+                </ion-row>
+                <ion-row>
+                    <ion-text><span style="font-weight: bolder">1080</span> pas</ion-text>
+                    <ion-progress-bar color="secondary" value="0.5"></ion-progress-bar>
+                </ion-row>
+            </ion-grid>
+        </ion-card-content>
+    </ion-card>
 </ion-content>

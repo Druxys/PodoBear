@@ -2,17 +2,17 @@ import {Component, ViewChild} from '@angular/core';
 import {Chart} from 'chart.js';
 import {draw, generate} from 'patternomaly';
 import {ModalController} from '@ionic/angular';
-import { StatStepPage } from '../stat-step/stat-step.page';
+import {StatStepPage} from '../stat-step/stat-step.page';
 import {StatDistPage} from '../stat-dist/stat-dist.page';
 import {StatKalPage} from '../stat-kal/stat-kal.page';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
-import { Device } from '@ionic-native/device/ngx';
+import {Device} from '@ionic-native/device/ngx';
 import {DeviceMotion, DeviceMotionAccelerationData} from '@ionic-native/device-motion/ngx';
 import {Result} from '../../Models/Result';
 import {Data} from '../../Models/Data';
 import {Gyroscope, GyroscopeOptions, GyroscopeOrientation} from '@ionic-native/gyroscope/ngx';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+import {Geolocation} from '@ionic-native/geolocation/ngx';
 
 const apiUrl = 'http://185.216.25.16:5000/datas';
 
@@ -76,14 +76,15 @@ export class HomePage {
 
     constructor(public modalController: ModalController, private device: Device, private deviceMotion: DeviceMotion,
                 private gyroscope: Gyroscope, private api: HttpClient, private geolocation: Geolocation) {
-    this.minX = 0;
-    this.maxX = 0;
-    this.minY = 0;
-    this.maxY = 0;
-    this.minZ = 0;
-    this.maxZ = 0;
-    this.gyro();
-}
+        this.minX = 0;
+        this.maxX = 0;
+        this.minY = 0;
+        this.maxY = 0;
+        this.minZ = 0;
+        this.maxZ = 0;
+        this.gyro();
+    }
+
     ionViewDidEnter() {
         this.createBarChart();
     }
@@ -92,24 +93,24 @@ export class HomePage {
         this.bars = new Chart(this.barChart.nativeElement, {
             type: 'doughnut',
             data: {
-              labels: [
-                'Actif',
-                'Inactif'
-              ],
+                labels: [
+                    'Actif',
+                    'Inactif'
+                ],
                 datasets: [{
                     data: [10, 30],
-                  backgroundColor: [
-                    '#5DAEB3', '#826251'
-                  ],
+                    backgroundColor: [
+                        '#5DAEB3', '#826251'
+                    ],
                 }],
-
 
 
             },
             options: {
                 legend: {
                     display: false
-                }}
+                }
+            }
         });
     }
 
@@ -136,7 +137,8 @@ export class HomePage {
 
     gyro() {
 
-        this.geolocation.getCurrentPosition().then((resp) => {}).catch((error) => {
+        this.geolocation.getCurrentPosition().then((resp) => {
+        }).catch((error) => {
             this.accuracy = 'error';
             this.long = 'error';
             this.lat = 'error';
@@ -150,7 +152,6 @@ export class HomePage {
             this.long = data.coords.longitude;
             this.accuracy = data.coords.accuracy;
         });
-
 
 
         let options: GyroscopeOptions = {
@@ -229,16 +230,16 @@ export class HomePage {
             };
             const AxeMax = Math.max(this.result.X, this.result.Y, this.result.Z);
 
-            if ( this.result.X == AxeMax) {
+            if (this.result.X == AxeMax) {
                 let treshold = ((this.minX + this.maxX) / 2);
                 let somme = 0;
                 let moyenne = 0;
 
 
-                this.Array.forEach(function(element) {
+                this.Array.forEach(function (element) {
                     moyenne += element.accX;
                 });
-                moyenne = (moyenne / this.Array.length );
+                moyenne = (moyenne / this.Array.length);
 
                 for (let i = 0; i < this.Array.length; i++) {
                     somme += (Math.pow(this.Array[i]["accX"] - moyenne, 2));
@@ -246,7 +247,7 @@ export class HomePage {
                 let stepValid = 0;
                 for (let i = 0; i < this.Array.length; i++) {
                     let a = i + 1;
-                    if (this.Array[i]["accX"] <= 8.5 && this.Array[i]['accX'] >= -8.5){
+                    if (this.Array[i]["accX"] <= 8.5 && this.Array[i]['accX'] >= -8.5) {
                         const et = Math.sqrt((somme / (this.Array.length - 1)));
                         this.affETX = et;
 
@@ -258,27 +259,27 @@ export class HomePage {
                         }
                     }
                 }
-                if ( this.stepStatus ) {
-                    if (stepValid <= 3 && stepValid >= 1){
+                if (this.stepStatus) {
+                    if (stepValid <= 3 && stepValid >= 1) {
                         this.step = (Number(this.step) + Number(stepValid));
                     } else {
                         this.stepStatus = false;
                     }
                 } else {
-                    if (stepValid <= 3 && stepValid >= 1){
+                    if (stepValid <= 3 && stepValid >= 1) {
                         this.stepStatus = true;
                     }
                 }
             }
-            if ( this.result.Y == AxeMax ) {
+            if (this.result.Y == AxeMax) {
                 let treshold = ((this.minY + this.maxY) / 2);
                 let somme = 0;
                 let moyenne = 0;
                 let stepValid = 0;
-                this.Array.forEach(function(element) {
+                this.Array.forEach(function (element) {
                     moyenne += element.accY;
                 });
-                moyenne = (moyenne / this.Array.length );
+                moyenne = (moyenne / this.Array.length);
 
                 for (let i = 0; i < this.Array.length; i++) {
                     somme += (Math.pow(this.Array[i]["accY"] - moyenne, 2));
@@ -287,7 +288,7 @@ export class HomePage {
 
                 for (let i = 0; i < this.Array.length; i++) {
                     let a = i + 1;
-                    if (this.Array[i]["accY"] <= 8.5 && this.Array[i]['accY'] >= -8.5){
+                    if (this.Array[i]["accY"] <= 8.5 && this.Array[i]['accY'] >= -8.5) {
                         const et = Math.sqrt((somme / (this.Array.length - 1)));
                         this.affETY = et;
                         if (i !== (this.Array.length - 1) && (this.Array[i]["accY"] < et || this.Array[i]["accY"] > (et * -1))) {
@@ -297,34 +298,34 @@ export class HomePage {
                         }
                     }
                 }
-                if ( this.stepStatus ) {
-                    if (stepValid <= 3 && stepValid >= 1){
+                if (this.stepStatus) {
+                    if (stepValid <= 3 && stepValid >= 1) {
                         this.step = (Number(this.step) + Number(stepValid));
                     } else {
                         this.stepStatus = false;
                     }
                 } else {
-                    if (stepValid <= 3 && stepValid >= 1){
+                    if (stepValid <= 3 && stepValid >= 1) {
                         this.stepStatus = true;
                     }
                 }
             }
-            if ( this.result.Z == AxeMax ) {
+            if (this.result.Z == AxeMax) {
                 let treshold = ((this.minZ + this.maxZ) / 2);
                 let somme = 0;
                 let moyenne = 0;
                 let stepValid = 0;
-                this.Array.forEach(function(element) {
+                this.Array.forEach(function (element) {
                     moyenne += element.accZ;
                 });
-                moyenne = (moyenne / this.Array.length );
+                moyenne = (moyenne / this.Array.length);
 
                 for (let i = 0; i < this.Array.length; i++) {
                     somme += (Math.pow(this.Array[i]["accZ"] - moyenne, 2));
                 }
                 for (let i = 0; i < this.Array.length; i++) {
                     let a = i + 1;
-                    if (this.Array[i]["accZ"] <= 8.5 && this.Array[i]['accZ'] >= -8.5){
+                    if (this.Array[i]["accZ"] <= 8.5 && this.Array[i]['accZ'] >= -8.5) {
                         const et = Math.sqrt((somme / (this.Array.length - 1)));
                         this.affETZ = et;
                         if (i !== (this.Array.length - 1) && (this.Array[i]["accZ"] < et || this.Array[i]["accZ"] > (et * -1))) {
@@ -334,7 +335,7 @@ export class HomePage {
                         }
                     }
                 }
-                if ( this.stepStatus ) {
+                if (this.stepStatus) {
                     if (stepValid <= 3 && stepValid >= 1) {
                         this.step = (Number(this.step) + Number(stepValid));
                     } else {
