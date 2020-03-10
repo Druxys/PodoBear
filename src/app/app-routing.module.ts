@@ -3,33 +3,34 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)},  {
+  { path: 'home', loadChildren: () => import('./Pages/home/home.module').then(m => m.HomePageModule)},
+  {
     path: 'settings',
-    loadChildren: () => import('./settings/settings.module').then( m => m.SettingsPageModule)
+    loadChildren: () => import('./Pages/settings/settings.module').then(m => m.SettingsPageModule)
   },
   {
     path: 'browse',
-    loadChildren: () => import('./browse/browse.module').then( m => m.BrowsePageModule)
+    loadChildren: () => import('./Pages/browse/browse.module').then(m => m.BrowsePageModule)
   },
   {
     path: 'sign-in',
-    loadChildren: () => import('./sign-in/sign-in.module').then( m => m.SignInPageModule)
+    loadChildren: () => import('./Pages/sign-in/sign-in.module').then(m => m.SignInPageModule)
   },
   {
     path: 'sign-up',
-    loadChildren: () => import('./sign-up/sign-up.module').then( m => m.SignUpPageModule)
+    loadChildren: () => import('./Pages/sign-up/sign-up.module').then(m => m.SignUpPageModule)
   },
   {
     path: 'stat-step',
-    loadChildren: () => import('./stat-step/stat-step.module').then( m => m.StatStepPageModule)
+    loadChildren: () => import('./Pages/stat-step/stat-step.module').then(m => m.StatStepPageModule)
   },
   {
     path: 'stat-dist',
-    loadChildren: () => import('./stat-dist/stat-dist.module').then( m => m.StatDistPageModule)
+    loadChildren: () => import('./Pages/stat-dist/stat-dist.module').then(m => m.StatDistPageModule)
   },
   {
     path: 'stat-kal',
-    loadChildren: () => import('./stat-kal/stat-kal.module').then( m => m.StatKalPageModule)
+    loadChildren: () => import('./Pages/stat-kal/stat-kal.module').then(m => m.StatKalPageModule)
   },
 
 ];
