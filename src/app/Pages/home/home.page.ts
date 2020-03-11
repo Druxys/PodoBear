@@ -114,8 +114,8 @@ export class HomePage implements OnInit {
         for (i = 0; i < limitDatas; i++) {
             datasArray[i] = this.data[i].positionX;
             indexArray[i] = i;
-            console.log(datasArray);
         }
+        console.log(datasArray);
 
         this.bars = new Chart(this.barChart.nativeElement, {
             type: 'doughnut',
