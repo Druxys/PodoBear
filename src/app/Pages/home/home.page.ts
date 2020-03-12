@@ -3732,7 +3732,7 @@ export class HomePage implements OnInit {
         this.maxY = 0;
         this.minZ = 0;
         this.maxZ = 0;
-        this.calculKal();
+        this.gyro();
     }
 
     ngOnInit() {
@@ -3957,6 +3957,7 @@ export class HomePage implements OnInit {
                     }
                 }
             }
+            this.calculKal(this.stepValid);
             if (this.stepStatus) {
                 this.api.post(apiUrl + '/add', JSON.stringify(this.Array), this.httpOptions).subscribe();
             }
@@ -4043,9 +4044,9 @@ export class HomePage implements OnInit {
         return await modal.present();
     }
 
-    calculKal() {
+    calculKal(stepValid) {
         this.height = 1.75;
-        const stepsPerSec = this.stepValid;
+        const stepsPerSec = stepValid;
         const stride = this.height / 2.5;
         const speed = (stepsPerSec * stride) * 4.5;
         console.log('StepValid :' + this.stepValid);

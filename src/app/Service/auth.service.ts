@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Users} from '../models/Users';
+import {Users} from '../Models/Users';
 import { Storage } from '@ionic/storage';
 import { BehaviorSubject } from 'rxjs';
 import {Platform} from '@ionic/angular';
