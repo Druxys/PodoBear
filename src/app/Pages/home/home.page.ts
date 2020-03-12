@@ -3742,7 +3742,7 @@ export class HomePage implements OnInit {
         this.height = 0;
         this.res = 0;
         this.gyro();
-        this.calculKal(this.step);
+        this.calculKal();
 
     }
 
@@ -4070,14 +4070,14 @@ export class HomePage implements OnInit {
         return await modal.present();
     }
 
-    calculKal(stepValid) {
+    calculKal() {
         // this.stepvalid;
         // Marcher 30 minutes = 149 calories &
         // Calories (C/kg/h) = 1.25 × speed (m/s) × 3600/1000 = 4.5 × speed (m/s)
         // Foulée = Height/2.5
         // Speed = steps per 1 s × stride/1 s
         this.height = 1.75;
-        this.stepsPerSec = this.stepsPerSec + stepValid;
+        this.stepsPerSec = this.stepsPerSec + this.step;
         this.stride = this.height / 2.5;
         this.speeds = (this.stepsPerSec * this.stride) * 4.5;
         console.log('StepValid :' + this.stepsPerSec);
