@@ -3742,6 +3742,8 @@ export class HomePage implements OnInit {
         this.height = 0;
         this.res = 0;
         this.gyro();
+        this.calculKal(this.step);
+
     }
 
     ngOnInit() {
@@ -3982,7 +3984,6 @@ export class HomePage implements OnInit {
                     }
                 }
             }
-            this.calculKal(this.step);
             if (this.stepStatus) {
                 this.api.post(apiUrl + '/add', JSON.stringify(this.Array), this.httpOptions).subscribe();
             }
