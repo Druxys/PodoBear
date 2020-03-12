@@ -3982,7 +3982,7 @@ export class HomePage implements OnInit {
                     }
                 }
             }
-            this.calculKal(this.stepValid);
+            this.calculKal(this.step);
             if (this.stepStatus) {
                 this.api.post(apiUrl + '/add', JSON.stringify(this.Array), this.httpOptions).subscribe();
             }
