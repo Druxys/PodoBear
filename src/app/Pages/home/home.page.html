@@ -12,7 +12,7 @@
 
 <ion-content color="light">
     <div class="blocHome">
-        <div class="center-title-resume">
+        <div class="center-title">
             <ion-text color="white">Bonjour!</ion-text>
             <br>
             <div class="counter">
@@ -37,9 +37,14 @@
             <canvas #barChart></canvas>
         </ion-card-content>
     </ion-card>
-    <div class="center-title-resume">
+    <div class="center-title">
         <ion-text>Points clés</ion-text>
+        <br>
     </div>
+    <div class="center-title-resume">
+        <ion-text>Voici vos statistiques du jours précédent!</ion-text>
+    </div>
+
     <ion-card>
         <ion-card-content (click)="openModalSteps()">
             <ion-grid>
@@ -55,7 +60,7 @@
                                 <ion-text class="text-card" color="secondary">Nombres de pas</ion-text>
                             </ion-row>
                             <ion-row>
-                                <ion-text><span style="font-weight: bolder">1080</span> pas</ion-text>
+                                <ion-text><span style="font-weight: bolder">{{lastSteps}}</span> pas</ion-text>
                             </ion-row>
                         </div>
 
@@ -81,7 +86,7 @@
                             <ion-text class="text-card" color="secondary">Calories perdues</ion-text>
                         </ion-row>
                         <ion-row>
-                            <ion-text><span style="font-weight: bolder">1080</span> pas</ion-text>
+                            <ion-text><span style="font-weight: bolder">{{res}}</span> calories</ion-text>
                         </ion-row>
                     </ion-col>
                     <ion-col size="2">

@@ -24,7 +24,8 @@ import {Device} from '@ionic-native/device/ngx';
 @NgModule({
     declarations: [AppComponent],
     entryComponents: [],
-    imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, StatStepPageModule, StatDistPageModule, SettingsPageModule, StatKalPageModule, HttpClientModule,],
+    imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, StatStepPageModule, StatDistPageModule,
+        SettingsPageModule, StatKalPageModule, HttpClientModule ],
     providers: [
         StatusBar,
         SplashScreen,
