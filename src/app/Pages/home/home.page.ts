@@ -76,6 +76,8 @@ export class HomePage implements OnInit {
 
     private height: number;
 
+    public stepsPerSec: number;
+
     public lastSteps: any;
 
     public jsonStats = [
@@ -4046,9 +4048,9 @@ export class HomePage implements OnInit {
 
     calculKal(stepValid) {
         this.height = 1.75;
-        const stepsPerSec = stepValid;
+        this.stepsPerSec = this.stepsPerSec + stepValid;
         const stride = this.height / 2.5;
-        const speed = (stepsPerSec * stride) * 4.5;
+        const speed = (this.stepsPerSec * stride) * 4.5;
         console.log('StepValid :' + this.stepValid);
         // this.stepvalid;
         // Marcher 30 minutes = 149 calories &
