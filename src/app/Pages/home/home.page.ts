@@ -53,6 +53,10 @@ export class HomePage implements OnInit {
     public maxZ: number;
     public minZ: number;
 
+    public speeds: number;
+
+    public stride: number;
+
     public x = 0;
     public y = 0;
     public z = 0;
@@ -74,9 +78,9 @@ export class HomePage implements OnInit {
 
     public timestamp: any;
 
-    private height: number;
+    private height: any;
 
-    public stepsPerSec: number;
+    public stepsPerSec: any;
 
     public lastSteps: any;
 
@@ -3734,6 +3738,9 @@ export class HomePage implements OnInit {
         this.maxY = 0;
         this.minZ = 0;
         this.maxZ = 0;
+        this.stepsPerSec = 0;
+        this.height = 0;
+        this.res = 0;
         this.gyro();
     }
 
@@ -3747,8 +3754,10 @@ export class HomePage implements OnInit {
             });
     }
 
+    // count of step per second
     gyro() {
 
+        
         this.geolocation.getCurrentPosition().then((resp) => {
         }).catch((error) => {
             this.accuracy = 'error';
@@ -3765,7 +3774,7 @@ export class HomePage implements OnInit {
             this.accuracy = data.coords.accuracy;
         });
 
-
+        
         const options: GyroscopeOptions = {
             frequency: 50
         };
@@ -3782,6 +3791,7 @@ export class HomePage implements OnInit {
 
         this.deviceMotion.getCurrentAcceleration().then().catch();
 
+        // Data send by the accelerometer every 50 ms
         this.deviceMotion.watchAcceleration({frequency: 50}).subscribe((acceleration: DeviceMotionAccelerationData) => {
             this.accX = acceleration.x;
             this.accZ = acceleration.z;
@@ -3791,6 +3801,7 @@ export class HomePage implements OnInit {
 
         setInterval(() => {
             this.position(this.accX, this.accY, this.accZ);
+            // Define the max and the min of acceleration data on each axe
             if (this.minX > this.accX) {
                 this.minX = this.accX;
             }
@@ -3840,8 +3851,10 @@ export class HomePage implements OnInit {
                 Y: y,
                 Z: z,
             };
+            // Define axe with the variation max
             const AxeMax = Math.max(this.result.X, this.result.Y, this.result.Z);
 
+            // Count step based on axe  if axe has the max variation
             if (this.result.X == AxeMax) {
                 const treshold = ((this.minX + this.maxX) / 2);
                 let somme = 0;
@@ -3853,17 +3866,20 @@ export class HomePage implements OnInit {
                 });
                 moyenne = (moyenne / this.Array.length);
 
+                
                 for (let i = 0; i < this.Array.length; i++) {
                     somme += (Math.pow(this.Array[i].accX - moyenne, 2));
                 }
                 // let stepValid = 0;
+                //
                 for (let i = 0; i < this.Array.length; i++) {
                     const a = i + 1;
                     if (this.Array[i].accX <= 8.5 && this.Array[i].accX >= -8.5) {
+                        // Define the standard error
                         const et = Math.sqrt((somme / (this.Array.length - 1)));
                         this.affETX = et;
 
-
+                        // Calculation of step
                         if (i !== (this.Array.length - 1) && (this.Array[i].accX < et || this.Array[i].accX > (et * -1))) {
                             if (this.Array[i].accX >= treshold && this.Array[a].accX <= treshold) {
                                 this.stepValid++;
@@ -3871,6 +3887,7 @@ export class HomePage implements OnInit {
                         }
                     }
                 }
+                // Verification of validstep
                 if (this.stepStatus) {
                     if (this.stepValid <= 3 && this.stepValid >= 1) {
                         this.step = (Number(this.step) + Number(this.stepValid));
@@ -3883,6 +3900,7 @@ export class HomePage implements OnInit {
                     }
                 }
             }
+            // Count step based on axe  if axe has the max variation
             if (this.result.Y == AxeMax) {
                 const treshold = ((this.minY + this.maxY) / 2);
                 let somme = 0;
@@ -3903,6 +3921,7 @@ export class HomePage implements OnInit {
                     if (this.Array[i].accY <= 8.5 && this.Array[i].accY >= -8.5) {
                         const et = Math.sqrt((somme / (this.Array.length - 1)));
                         this.affETY = et;
+                        // Calculation of step
                         if (i !== (this.Array.length - 1) && (this.Array[i].accY < et || this.Array[i].accY > (et * -1))) {
                             if (this.Array[i].accY >= treshold && this.Array[a].accY <= treshold) {
                                 this.stepValid++;
@@ -3910,6 +3929,7 @@ export class HomePage implements OnInit {
                         }
                     }
                 }
+                // Verification of validstep
                 if (this.stepStatus) {
                     if (this.stepValid <= 3 && this.stepValid >= 1) {
                         this.step = (Number(this.step) + Number(this.stepValid));
@@ -3922,6 +3942,7 @@ export class HomePage implements OnInit {
                     }
                 }
             }
+            // Count step based on axe  if axe has the max variation
             if (this.result.Z == AxeMax) {
                 const treshold = ((this.minZ + this.maxZ) / 2);
                 let somme = 0;
@@ -3940,6 +3961,7 @@ export class HomePage implements OnInit {
                     if (this.Array[i].accZ <= 8.5 && this.Array[i].accZ >= -8.5) {
                         const et = Math.sqrt((somme / (this.Array.length - 1)));
                         this.affETZ = et;
+                        // Calculation of step
                         if (i !== (this.Array.length - 1) && (this.Array[i].accZ < et || this.Array[i].accZ > (et * -1))) {
                             if (this.Array[i].accZ >= treshold && this.Array[a].accZ <= treshold) {
                                 this.stepValid++;
@@ -3947,6 +3969,7 @@ export class HomePage implements OnInit {
                         }
                     }
                 }
+                // Verification of validstep
                 if (this.stepStatus) {
                     if (this.stepValid <= 3 && this.stepValid >= 1) {
                         this.step = (Number(this.step) + Number(this.stepValid));
@@ -4047,17 +4070,18 @@ export class HomePage implements OnInit {
     }
 
     calculKal(stepValid) {
-        this.height = 1.75;
-        this.stepsPerSec = this.stepsPerSec + stepValid;
-        const stride = this.height / 2.5;
-        const speed = (this.stepsPerSec * stride) * 4.5;
-        console.log('StepValid :' + this.stepValid);
         // this.stepvalid;
         // Marcher 30 minutes = 149 calories &
         // Calories (C/kg/h) = 1.25 × speed (m/s) × 3600/1000 = 4.5 × speed (m/s)
         // Foulée = Height/2.5
         // Speed = steps per 1 s × stride/1 s
-        this.res = 1.25 * speed * 3600 / 1000 ;
+        this.height = 1.75;
+        this.stepsPerSec = this.stepsPerSec + stepValid;
+        this.stride = this.height / 2.5;
+        this.speeds = (this.stepsPerSec * this.stride) * 4.5;
+        console.log('StepValid :' + this.stepsPerSec);
+        this.res = this.res + (1.25 * this.speeds * 3600 / 1000);
+        console.log( 'resultat :' + this.res);
         return this.res;
     }
 
