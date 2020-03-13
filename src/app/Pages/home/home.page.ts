@@ -1,10 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Chart} from 'chart.js';
-import {draw, generate} from 'patternomaly';
 import {ModalController} from '@ionic/angular';
 import {StatStepPage} from '../stat-step/stat-step.page';
 import {StatDistPage} from '../stat-dist/stat-dist.page';
 import {StatKalPage} from '../stat-kal/stat-kal.page';
+import { Plugins } from '@capacitor/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 import {Device} from '@ionic-native/device/ngx';
@@ -16,7 +16,10 @@ import {Geolocation} from '@ionic-native/geolocation/ngx';
 
 import {DataService} from '../../Service/data.service';
 
-const apiUrl = 'http://185.216.25.16:5000/datas';
+const apiUrl = 'https://185.216.25.16:5000/datas';
+
+const { App, BackgroundTask } = Plugins;
+
 
 @Component({
     selector: 'app-home',
@@ -88,8 +91,18 @@ export class HomePage implements OnInit {
         this.maxY = 0;
         this.minZ = 0;
         this.maxZ = 0;
-        this.gyro();
+        this.gyro(50);
+        App.addListener('appStateChange', async (state) => {
+            if (!state.isActive) {
+                BackgroundTask.beforeExit(async () => {
+                    this.gyro(50);
+                });
+            } else {
+                this.gyro(50);
+            }
+        });
     }
+
 
     ngOnInit() {
         this.dataService.getDatas()
@@ -162,7 +175,7 @@ export class HomePage implements OnInit {
         return await modal.present();
     }
 
-    gyro() {
+    gyro(time) {
 
         this.geolocation.getCurrentPosition().then((resp) => {
         }).catch((error) => {
@@ -173,6 +186,7 @@ export class HomePage implements OnInit {
         });
 
         let watch = this.geolocation.watchPosition();
+
         watch.subscribe((data) => {
             this.speed = data.coords.speed;
             this.lat = data.coords.latitude;
@@ -181,12 +195,7 @@ export class HomePage implements OnInit {
         });
 
 
-        let options: GyroscopeOptions = {
-            frequency: 50
-        };
-
-        this.gyroscope.getCurrent(options).then().catch();
-
+        this.gyroscope.getCurrent({frequency: time}).then().catch();
 
         this.gyroscope.watch().subscribe((orientation: GyroscopeOrientation) => {
             this.x = orientation.x;
@@ -195,14 +204,18 @@ export class HomePage implements OnInit {
         });
 
 
+
+
         this.deviceMotion.getCurrentAcceleration().then().catch();
 
-        this.deviceMotion.watchAcceleration({frequency: 50}).subscribe((acceleration: DeviceMotionAccelerationData) => {
+        this.deviceMotion.watchAcceleration({frequency: time}).subscribe((acceleration: DeviceMotionAccelerationData) => {
             this.accX = acceleration.x;
             this.accZ = acceleration.z;
             this.accY = acceleration.y;
             this.timestamp = acceleration.timestamp;
         });
+
+
 
         setInterval(() => {
             this.position(this.accX, this.accY, this.accZ);
@@ -242,39 +255,39 @@ export class HomePage implements OnInit {
                 timestamp: this.timestamp,
                 id_device: this.device.uuid
             };
-
+            console.log(this.Data);
             this.Array.push(this.Data);
-        }, 50);
+        }, time);
 
         setInterval(() => {
-            const x = (this.maxX - this.minX);
-            const y = (this.maxY - this.minY);
-            const z = (this.maxZ - this.minZ);
-            this.result = {
-                X: x,
-                Y: y,
-                Z: z,
-            };
-            const AxeMax = Math.max(this.result.X, this.result.Y, this.result.Z);
+            if (this.Array.length >= 20) {
+                const x = (this.maxX - this.minX);
+                const y = (this.maxY - this.minY);
+                const z = (this.maxZ - this.minZ);
+                this.result = {
+                    X: x,
+                    Y: y,
+                    Z: z,
+                };
+                const AxeMax = Math.max(this.result.X, this.result.Y, this.result.Z);
 
-            if (this.result.X == AxeMax) {
-                let treshold = ((this.minX + this.maxX) / 2);
-                let somme = 0;
-                let moyenne = 0;
+                if ( this.result.X == AxeMax) {
+                    let treshold = ((this.minX + this.maxX) / 2);
+                    let somme = 0;
+                    let moyenne = 0;
 
 
-                this.Array.forEach(function (element) {
-                    moyenne += element.accX;
-                });
-                moyenne = (moyenne / this.Array.length);
+                    this.Array.forEach(function(element) {
+                        moyenne += element.accX;
+                    });
+                    moyenne = (moyenne / this.Array.length );
 
-                for (let i = 0; i < this.Array.length; i++) {
-                    somme += (Math.pow(this.Array[i]["accX"] - moyenne, 2));
-                }
-                let stepValid = 0;
-                for (let i = 0; i < this.Array.length; i++) {
-                    let a = i + 1;
-                    if (this.Array[i]["accX"] <= 8.5 && this.Array[i]['accX'] >= -8.5) {
+                    for (let i = 0; i < this.Array.length; i++) {
+                        somme += (Math.pow(this.Array[i]["accX"] - moyenne, 2));
+                    }
+                    let stepValid = 0;
+                    for (let i = 0; i < this.Array.length; i++) {
+                        let a = i + 1;
                         const et = Math.sqrt((somme / (this.Array.length - 1)));
                         this.affETX = et;
 
@@ -285,37 +298,34 @@ export class HomePage implements OnInit {
                             }
                         }
                     }
-                }
-                if (this.stepStatus) {
-                    if (stepValid <= 3 && stepValid >= 1) {
-                        this.step = (Number(this.step) + Number(stepValid));
+                    if ( this.stepStatus ) {
+                        if (stepValid <= 3 && stepValid >= 1){
+                            this.step = (Number(this.step) + Number(stepValid));
+                        } else {
+                            this.stepStatus = false;
+                        }
                     } else {
-                        this.stepStatus = false;
-                    }
-                } else {
-                    if (stepValid <= 3 && stepValid >= 1) {
-                        this.stepStatus = true;
+                        if (stepValid <= 3 && stepValid >= 1){
+                            this.stepStatus = true;
+                        }
                     }
                 }
-            }
-            if (this.result.Y == AxeMax) {
-                let treshold = ((this.minY + this.maxY) / 2);
-                let somme = 0;
-                let moyenne = 0;
-                let stepValid = 0;
-                this.Array.forEach(function (element) {
-                    moyenne += element.accY;
-                });
-                moyenne = (moyenne / this.Array.length);
+                if ( this.result.Y == AxeMax ) {
+                    let treshold = ((this.minY + this.maxY) / 2);
+                    let somme = 0;
+                    let moyenne = 0;
+                    let stepValid = 0;
+                    this.Array.forEach(function(element) {
+                        moyenne += element.accY;
+                    });
+                    moyenne = (moyenne / this.Array.length );
 
-                for (let i = 0; i < this.Array.length; i++) {
-                    somme += (Math.pow(this.Array[i]["accY"] - moyenne, 2));
-                }
+                    for (let i = 0; i < this.Array.length; i++) {
+                        somme += (Math.pow(this.Array[i]["accY"] - moyenne, 2));
+                    }
 
-
-                for (let i = 0; i < this.Array.length; i++) {
-                    let a = i + 1;
-                    if (this.Array[i]["accY"] <= 8.5 && this.Array[i]['accY'] >= -8.5) {
+                    for (let i = 0; i < this.Array.length; i++) {
+                        let a = i + 1;
                         const et = Math.sqrt((somme / (this.Array.length - 1)));
                         this.affETY = et;
                         if (i !== (this.Array.length - 1) && (this.Array[i]["accY"] < et || this.Array[i]["accY"] > (et * -1))) {
@@ -324,35 +334,33 @@ export class HomePage implements OnInit {
                             }
                         }
                     }
-                }
-                if (this.stepStatus) {
-                    if (stepValid <= 3 && stepValid >= 1) {
-                        this.step = (Number(this.step) + Number(stepValid));
+                    if ( this.stepStatus ) {
+                        if (stepValid <= 3 && stepValid >= 1){
+                            this.step = (Number(this.step) + Number(stepValid));
+                        } else {
+                            this.stepStatus = false;
+                        }
                     } else {
-                        this.stepStatus = false;
-                    }
-                } else {
-                    if (stepValid <= 3 && stepValid >= 1) {
-                        this.stepStatus = true;
+                        if (stepValid <= 3 && stepValid >= 1){
+                            this.stepStatus = true;
+                        }
                     }
                 }
-            }
-            if (this.result.Z == AxeMax) {
-                let treshold = ((this.minZ + this.maxZ) / 2);
-                let somme = 0;
-                let moyenne = 0;
-                let stepValid = 0;
-                this.Array.forEach(function (element) {
-                    moyenne += element.accZ;
-                });
-                moyenne = (moyenne / this.Array.length);
+                if ( this.result.Z == AxeMax ) {
+                    let treshold = ((this.minZ + this.maxZ) / 2);
+                    let somme = 0;
+                    let moyenne = 0;
+                    let stepValid = 0;
+                    this.Array.forEach(function(element) {
+                        moyenne += element.accZ;
+                    });
+                    moyenne = (moyenne / this.Array.length );
 
-                for (let i = 0; i < this.Array.length; i++) {
-                    somme += (Math.pow(this.Array[i]["accZ"] - moyenne, 2));
-                }
-                for (let i = 0; i < this.Array.length; i++) {
-                    let a = i + 1;
-                    if (this.Array[i]["accZ"] <= 8.5 && this.Array[i]['accZ'] >= -8.5) {
+                    for (let i = 0; i < this.Array.length; i++) {
+                        somme += (Math.pow(this.Array[i]["accZ"] - moyenne, 2));
+                    }
+                    for (let i = 0; i < this.Array.length; i++) {
+                        let a = i + 1;
                         const et = Math.sqrt((somme / (this.Array.length - 1)));
                         this.affETZ = et;
                         if (i !== (this.Array.length - 1) && (this.Array[i]["accZ"] < et || this.Array[i]["accZ"] > (et * -1))) {
@@ -361,33 +369,35 @@ export class HomePage implements OnInit {
                             }
                         }
                     }
-                }
-                if (this.stepStatus) {
-                    if (stepValid <= 3 && stepValid >= 1) {
-                        this.step = (Number(this.step) + Number(stepValid));
+                    if ( this.stepStatus ) {
+                        if (stepValid <= 3 && stepValid >= 1) {
+                            this.step = (Number(this.step) + Number(stepValid));
+                        } else {
+                            this.stepStatus = false;
+                        }
                     } else {
-                        this.stepStatus = false;
-                    }
-                } else {
-                    if (stepValid <= 3 && stepValid >= 1) {
-                        this.stepStatus = true;
+                        if (stepValid <= 3 && stepValid >= 1) {
+                            this.stepStatus = true;
+                        }
                     }
                 }
+
+                if (this.stepStatus) {
+                    this.api.post(apiUrl + '/add', JSON.stringify(this.Array), this.httpOptions).subscribe();
+                }
+
+                this.Array.splice(0, 100);
+                this.result.X = 0;
+                this.result.Y = 0;
+                this.result.Z = 0;
+                this.maxX = 0;
+                this.minX = 0;
+                this.maxY = 0;
+                this.minY = 0;
+                this.maxZ = 0;
+                this.minZ = 0;
             }
-            if (this.stepStatus) {
-                this.api.post(apiUrl + '/add', JSON.stringify(this.Array), this.httpOptions).subscribe();
-            }
-            this.Array.splice(0, 100);
-            this.result.X = 0;
-            this.result.Y = 0;
-            this.result.Z = 0;
-            this.maxX = 0;
-            this.minX = 0;
-            this.maxY = 0;
-            this.minY = 0;
-            this.maxZ = 0;
-            this.minZ = 0;
-        }, 1000);
+        }, (time * 20));
     }
 
 
