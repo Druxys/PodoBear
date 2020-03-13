@@ -1,10 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Chart} from 'chart.js';
-import {draw, generate} from 'patternomaly';
 import {ModalController} from '@ionic/angular';
 import {StatStepPage} from '../stat-step/stat-step.page';
 import {StatDistPage} from '../stat-dist/stat-dist.page';
 import {StatKalPage} from '../stat-kal/stat-kal.page';
+import { Plugins } from '@capacitor/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 import {Device} from '@ionic-native/device/ngx';
@@ -17,6 +17,8 @@ import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {DataService} from '../../Service/data.service';
 
 const apiUrl = 'https://185.216.25.16:5000/datas';
+
+const { App, BackgroundTask } = Plugins;
 
 @Component({
     selector: 'app-home',
@@ -3743,8 +3745,18 @@ export class HomePage implements OnInit {
         this.res = 0;
         this.gyro();
         this.calculKal();
-
+        this.gyro(50);
+        App.addListener('appStateChange', async (state) => {
+            if (!state.isActive) {
+                BackgroundTask.beforeExit(async () => {
+                    this.gyro(50);
+                });
+            } else {
+                this.gyro(50);
+            }
+        });
     }
+
 
     ngOnInit() {
         this.dataService.getData()
@@ -3756,10 +3768,9 @@ export class HomePage implements OnInit {
             });
     }
 
-    // count of step per second
-    gyro() {
 
-        
+    gyro(time) {
+       
         this.geolocation.getCurrentPosition().then((resp) => {
         }).catch((error) => {
             this.accuracy = 'error';
@@ -3776,19 +3787,20 @@ export class HomePage implements OnInit {
             this.accuracy = data.coords.accuracy;
         });
 
-        
+       
         const options: GyroscopeOptions = {
             frequency: 50
         };
 
         this.gyroscope.getCurrent(options).then().catch();
 
-
         this.gyroscope.watch().subscribe((orientation: GyroscopeOrientation) => {
             this.x = orientation.x;
             this.z = orientation.z;
             this.y = orientation.y;
         });
+
+
 
 
         this.deviceMotion.getCurrentAcceleration().then().catch();
@@ -3800,6 +3812,8 @@ export class HomePage implements OnInit {
             this.accY = acceleration.y;
             this.timestamp = acceleration.timestamp;
         });
+
+
 
         setInterval(() => {
             this.position(this.accX, this.accY, this.accZ);
@@ -3840,44 +3854,39 @@ export class HomePage implements OnInit {
                 timestamp: this.timestamp,
                 id_device: this.device.uuid
             };
-
+            console.log(this.Data);
             this.Array.push(this.Data);
-        }, 50);
+        }, time);
 
         setInterval(() => {
-            const x = (this.maxX - this.minX);
-            const y = (this.maxY - this.minY);
-            const z = (this.maxZ - this.minZ);
-            this.result = {
-                X: x,
-                Y: y,
-                Z: z,
-            };
-            // Define axe with the variation max
-            const AxeMax = Math.max(this.result.X, this.result.Y, this.result.Z);
+            if (this.Array.length >= 20) {
+                const x = (this.maxX - this.minX);
+                const y = (this.maxY - this.minY);
+                const z = (this.maxZ - this.minZ);
+                this.result = {
+                    X: x,
+                    Y: y,
+                    Z: z,
+                };
+                const AxeMax = Math.max(this.result.X, this.result.Y, this.result.Z);
 
-            // Count step based on axe  if axe has the max variation
-            if (this.result.X == AxeMax) {
-                const treshold = ((this.minX + this.maxX) / 2);
-                let somme = 0;
-                let moyenne = 0;
+                if ( this.result.X == AxeMax) {
+                    let treshold = ((this.minX + this.maxX) / 2);
+                    let somme = 0;
+                    let moyenne = 0;
 
 
-                this.Array.forEach(function(element) {
-                    moyenne += element.accX;
-                });
-                moyenne = (moyenne / this.Array.length);
+                    this.Array.forEach(function(element) {
+                        moyenne += element.accX;
+                    });
+                    moyenne = (moyenne / this.Array.length );
 
-                
-                for (let i = 0; i < this.Array.length; i++) {
-                    somme += (Math.pow(this.Array[i].accX - moyenne, 2));
-                }
-                // let stepValid = 0;
-                //
-                for (let i = 0; i < this.Array.length; i++) {
-                    const a = i + 1;
-                    if (this.Array[i].accX <= 8.5 && this.Array[i].accX >= -8.5) {
-                        // Define the standard error
+                    for (let i = 0; i < this.Array.length; i++) {
+                        somme += (Math.pow(this.Array[i]["accX"] - moyenne, 2));
+                    }
+                    let stepValid = 0;
+                    for (let i = 0; i < this.Array.length; i++) {
+                        let a = i + 1;
                         const et = Math.sqrt((somme / (this.Array.length - 1)));
                         this.affETX = et;
 
@@ -3888,39 +3897,34 @@ export class HomePage implements OnInit {
                             }
                         }
                     }
-                }
-                // Verification of validstep
-                if (this.stepStatus) {
-                    if (this.stepValid <= 3 && this.stepValid >= 1) {
-                        this.step = (Number(this.step) + Number(this.stepValid));
+                    if ( this.stepStatus ) {
+                        if (stepValid <= 3 && stepValid >= 1){
+                            this.step = (Number(this.step) + Number(stepValid));
+                        } else {
+                            this.stepStatus = false;
+                        }
                     } else {
-                        this.stepStatus = false;
-                    }
-                } else {
-                    if (this.stepValid <= 3 && this.stepValid >= 1) {
-                        this.stepStatus = true;
+                        if (stepValid <= 3 && stepValid >= 1){
+                            this.stepStatus = true;
+                        }
                     }
                 }
-            }
-            // Count step based on axe  if axe has the max variation
-            if (this.result.Y == AxeMax) {
-                const treshold = ((this.minY + this.maxY) / 2);
-                let somme = 0;
-                let moyenne = 0;
-                this.stepValid = 0;
-                this.Array.forEach(function(element) {
-                    moyenne += element.accY;
-                });
-                moyenne = (moyenne / this.Array.length);
+                if ( this.result.Y == AxeMax ) {
+                    let treshold = ((this.minY + this.maxY) / 2);
+                    let somme = 0;
+                    let moyenne = 0;
+                    let stepValid = 0;
+                    this.Array.forEach(function(element) {
+                        moyenne += element.accY;
+                    });
+                    moyenne = (moyenne / this.Array.length );
 
-                for (let i = 0; i < this.Array.length; i++) {
-                    somme += (Math.pow(this.Array[i].accY - moyenne, 2));
-                }
+                    for (let i = 0; i < this.Array.length; i++) {
+                        somme += (Math.pow(this.Array[i]["accY"] - moyenne, 2));
+                    }
 
-
-                for (let i = 0; i < this.Array.length; i++) {
-                    const a = i + 1;
-                    if (this.Array[i].accY <= 8.5 && this.Array[i].accY >= -8.5) {
+                    for (let i = 0; i < this.Array.length; i++) {
+                        let a = i + 1;
                         const et = Math.sqrt((somme / (this.Array.length - 1)));
                         this.affETY = et;
                         // Calculation of step
@@ -3930,37 +3934,33 @@ export class HomePage implements OnInit {
                             }
                         }
                     }
-                }
-                // Verification of validstep
-                if (this.stepStatus) {
-                    if (this.stepValid <= 3 && this.stepValid >= 1) {
-                        this.step = (Number(this.step) + Number(this.stepValid));
+                    if ( this.stepStatus ) {
+                        if (stepValid <= 3 && stepValid >= 1){
+                            this.step = (Number(this.step) + Number(stepValid));
+                        } else {
+                            this.stepStatus = false;
+                        }
                     } else {
-                        this.stepStatus = false;
-                    }
-                } else {
-                    if (this.stepValid <= 3 && this.stepValid >= 1) {
-                        this.stepStatus = true;
+                        if (stepValid <= 3 && stepValid >= 1){
+                            this.stepStatus = true;
+                        }
                     }
                 }
-            }
-            // Count step based on axe  if axe has the max variation
-            if (this.result.Z == AxeMax) {
-                const treshold = ((this.minZ + this.maxZ) / 2);
-                let somme = 0;
-                let moyenne = 0;
-                this.stepValid = 0;
-                this.Array.forEach(function(element) {
-                    moyenne += element.accZ;
-                });
-                moyenne = (moyenne / this.Array.length);
+                if ( this.result.Z == AxeMax ) {
+                    let treshold = ((this.minZ + this.maxZ) / 2);
+                    let somme = 0;
+                    let moyenne = 0;
+                    let stepValid = 0;
+                    this.Array.forEach(function(element) {
+                        moyenne += element.accZ;
+                    });
+                    moyenne = (moyenne / this.Array.length );
 
-                for (let i = 0; i < this.Array.length; i++) {
-                    somme += (Math.pow(this.Array[i].accZ - moyenne, 2));
-                }
-                for (let i = 0; i < this.Array.length; i++) {
-                    const a = i + 1;
-                    if (this.Array[i].accZ <= 8.5 && this.Array[i].accZ >= -8.5) {
+                    for (let i = 0; i < this.Array.length; i++) {
+                        somme += (Math.pow(this.Array[i]["accZ"] - moyenne, 2));
+                    }
+                    for (let i = 0; i < this.Array.length; i++) {
+                        let a = i + 1;
                         const et = Math.sqrt((somme / (this.Array.length - 1)));
                         this.affETZ = et;
                         // Calculation of step
@@ -3983,21 +3983,23 @@ export class HomePage implements OnInit {
                         this.stepStatus = true;
                     }
                 }
+
+                if (this.stepStatus) {
+                    this.api.post(apiUrl + '/add', JSON.stringify(this.Array), this.httpOptions).subscribe();
+                }
+
+                this.Array.splice(0, 100);
+                this.result.X = 0;
+                this.result.Y = 0;
+                this.result.Z = 0;
+                this.maxX = 0;
+                this.minX = 0;
+                this.maxY = 0;
+                this.minY = 0;
+                this.maxZ = 0;
+                this.minZ = 0;
             }
-            if (this.stepStatus) {
-                this.api.post(apiUrl + '/add', JSON.stringify(this.Array), this.httpOptions).subscribe();
-            }
-            this.Array.splice(0, 100);
-            this.result.X = 0;
-            this.result.Y = 0;
-            this.result.Z = 0;
-            this.maxX = 0;
-            this.minX = 0;
-            this.maxY = 0;
-            this.minY = 0;
-            this.maxZ = 0;
-            this.minZ = 0;
-        }, 1000);
+        }, (time * 20));
     }
 
     position(accX, accY, accZ) {
