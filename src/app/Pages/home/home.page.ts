@@ -4,7 +4,7 @@ import {ModalController} from '@ionic/angular';
 import { StatStepPage } from '../stat-step/stat-step.page';
 import {StatDistPage} from '../stat-dist/stat-dist.page';
 import {StatKalPage} from '../stat-kal/stat-kal.page';
-import { Plugins } from '@capacitor/core';
+import {Plugins} from '@capacitor/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 import { Device } from '@ionic-native/device/ngx';
@@ -14,9 +14,11 @@ import {Data} from '../../Models/Data';
 import {Gyroscope, GyroscopeOptions, GyroscopeOrientation} from '@ionic-native/gyroscope/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 
+const {SplashScreen} = Plugins;
+
 const apiUrl = 'https://185.216.25.16:5000/datas';
 
-const { App, BackgroundTask } = Plugins;
+const {App, BackgroundTask} = Plugins;
 
 
 @Component({
@@ -3735,6 +3737,11 @@ export class HomePage {
         this.maxY = 0;
         this.minZ = 0;
         this.maxZ = 0;
+        this.stepsPerSec = 0;
+        this.height = 0;
+        this.res = 0;
+        this.gyro(50);
+        this.calculKal();
         this.gyro(50);
         App.addListener('appStateChange', async (state) => {
             if (!state.isActive) {
@@ -3798,7 +3805,9 @@ export class HomePage {
 
     gyro(time) {
 
-        this.geolocation.getCurrentPosition().then((resp) => {}).catch((error) => {
+
+        this.geolocation.getCurrentPosition().then((resp) => {
+        }).catch((error) => {
             this.accuracy = 'error';
             this.long = 'error';
             this.lat = 'error';
@@ -3814,6 +3823,9 @@ export class HomePage {
             this.accuracy = data.coords.accuracy;
         });
 
+        const options: GyroscopeOptions = {
+            frequency: 50
+        };
 
 
         this.gyroscope.getCurrent({frequency: time}).then().catch();
@@ -3826,8 +3838,6 @@ export class HomePage {
         });
 
 
-
-
         this.deviceMotion.getCurrentAcceleration().then().catch();
 
         this.deviceMotion.watchAcceleration({frequency: time}).subscribe((acceleration: DeviceMotionAccelerationData) => {
@@ -3836,7 +3846,6 @@ export class HomePage {
             this.accY = acceleration.y;
             this.timestamp = acceleration.timestamp;
         });
-
 
 
         setInterval(() => {
@@ -3893,16 +3902,16 @@ export class HomePage {
                 };
                 const AxeMax = Math.max(this.result.X, this.result.Y, this.result.Z);
 
-                if ( this.result.X == AxeMax) {
+                if (this.result.X == AxeMax) {
                     let treshold = ((this.minX + this.maxX) / 2);
                     let somme = 0;
                     let moyenne = 0;
 
 
-                    this.Array.forEach(function(element) {
+                    this.Array.forEach(function (element) {
                         moyenne += element.accX;
                     });
-                    moyenne = (moyenne / this.Array.length );
+                    moyenne = (moyenne / this.Array.length);
 
                     for (let i = 0; i < this.Array.length; i++) {
                         somme += (Math.pow(this.Array[i]["accX"] - moyenne, 2));
@@ -3920,27 +3929,27 @@ export class HomePage {
                             }
                         }
                     }
-                    if ( this.stepStatus ) {
-                        if (stepValid <= 3 && stepValid >= 1){
+                    if (this.stepStatus) {
+                        if (stepValid <= 3 && stepValid >= 1) {
                             this.step = (Number(this.step) + Number(stepValid));
                         } else {
                             this.stepStatus = false;
                         }
                     } else {
-                        if (stepValid <= 3 && stepValid >= 1){
+                        if (stepValid <= 3 && stepValid >= 1) {
                             this.stepStatus = true;
                         }
                     }
                 }
-                if ( this.result.Y == AxeMax ) {
+                if (this.result.Y == AxeMax) {
                     let treshold = ((this.minY + this.maxY) / 2);
                     let somme = 0;
                     let moyenne = 0;
                     let stepValid = 0;
-                    this.Array.forEach(function(element) {
+                    this.Array.forEach(function (element) {
                         moyenne += element.accY;
                     });
-                    moyenne = (moyenne / this.Array.length );
+                    moyenne = (moyenne / this.Array.length);
 
                     for (let i = 0; i < this.Array.length; i++) {
                         somme += (Math.pow(this.Array[i]["accY"] - moyenne, 2));
@@ -3964,20 +3973,20 @@ export class HomePage {
                             this.stepStatus = false;
                         }
                     } else {
-                        if (stepValid <= 3 && stepValid >= 1){
+                        if (stepValid <= 3 && stepValid >= 1) {
                             this.stepStatus = true;
                         }
                     }
                 }
-                if ( this.result.Z == AxeMax ) {
+                if (this.result.Z == AxeMax) {
                     let treshold = ((this.minZ + this.maxZ) / 2);
                     let somme = 0;
                     let moyenne = 0;
                     let stepValid = 0;
-                    this.Array.forEach(function(element) {
+                    this.Array.forEach(function (element) {
                         moyenne += element.accZ;
                     });
-                    moyenne = (moyenne / this.Array.length );
+                    moyenne = (moyenne / this.Array.length);
 
                     for (let i = 0; i < this.Array.length; i++) {
                         somme += (Math.pow(this.Array[i]["accZ"] - moyenne, 2));
@@ -4043,7 +4052,7 @@ export class HomePage {
         this.speeds = (this.stepsPerSec * this.stride) * 4.5;
         console.log('StepValid :' + this.stepsPerSec);
         this.res = this.res + (1.25 * this.speeds * 3600 / 1000);
-        console.log( 'resultat :' + this.res);
+        console.log('resultat :' + this.res);
         return this.res;
     }
 
