@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {DataService} from "../service/data.service";
+import {DataService} from '../Service/data.service';
 import { Chart } from 'chart.js';
 
 @Component({
