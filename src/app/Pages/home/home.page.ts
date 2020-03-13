@@ -1,24 +1,23 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {Chart} from 'chart.js';
 import {ModalController} from '@ionic/angular';
-import {StatStepPage} from '../stat-step/stat-step.page';
+import { StatStepPage } from '../stat-step/stat-step.page';
 import {StatDistPage} from '../stat-dist/stat-dist.page';
 import {StatKalPage} from '../stat-kal/stat-kal.page';
 import { Plugins } from '@capacitor/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
-import {Device} from '@ionic-native/device/ngx';
+import { Device } from '@ionic-native/device/ngx';
 import {DeviceMotion, DeviceMotionAccelerationData} from '@ionic-native/device-motion/ngx';
 import {Result} from '../../Models/Result';
 import {Data} from '../../Models/Data';
 import {Gyroscope, GyroscopeOptions, GyroscopeOrientation} from '@ionic-native/gyroscope/ngx';
-import {Geolocation} from '@ionic-native/geolocation/ngx';
-
-import {DataService} from '../../Service/data.service';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 const apiUrl = 'https://185.216.25.16:5000/datas';
 
 const { App, BackgroundTask } = Plugins;
+
 
 @Component({
     selector: 'app-home',
@@ -26,13 +25,10 @@ const { App, BackgroundTask } = Plugins;
     styleUrls: ['home.page.scss'],
     providers: [Gyroscope]
 })
-export class HomePage implements OnInit {
-
-
+export class HomePage {
     // @ts-ignore
     @ViewChild('barChart') barChart;
 
-    data: any;
     bars: any;
     colorArray: any;
 
@@ -54,10 +50,11 @@ export class HomePage implements OnInit {
 
     public maxZ: number;
     public minZ: number;
-
+    
     public speeds: number;
 
     public stride: number;
+
 
     public x = 0;
     public y = 0;
@@ -66,8 +63,6 @@ export class HomePage implements OnInit {
     public accX = 0;
     public accY = 0;
     public accZ = 0;
-
-    public stepValid = 0;
 
     public positionX = 0;
     public positionY = 0;
@@ -78,13 +73,15 @@ export class HomePage implements OnInit {
     public lat: any;
     public speed: any;
 
-    public timestamp: any;
-
     private height: any;
 
     public stepsPerSec: any;
 
     public lastSteps: any;
+
+    public timestamp: any;
+
+    public res: any;
 
     public jsonStats = [
         {
@@ -3723,28 +3720,21 @@ export class HomePage implements OnInit {
         }
     ];
 
+
     httpOptions = {
         headers: new HttpHeaders({
             'Content-Type': 'application/json'
         })
     };
-    public res: any;
-
 
     constructor(public modalController: ModalController, private device: Device, private deviceMotion: DeviceMotion,
-                private gyroscope: Gyroscope, private api: HttpClient, private geolocation: Geolocation,
-                private dataService: DataService) {
+                private gyroscope: Gyroscope, private api: HttpClient, private geolocation: Geolocation) {
         this.minX = 0;
         this.maxX = 0;
         this.minY = 0;
         this.maxY = 0;
         this.minZ = 0;
         this.maxZ = 0;
-        this.stepsPerSec = 0;
-        this.height = 0;
-        this.res = 0;
-        this.gyro();
-        this.calculKal();
         this.gyro(50);
         App.addListener('appStateChange', async (state) => {
             if (!state.isActive) {
@@ -3756,30 +3746,67 @@ export class HomePage implements OnInit {
             }
         });
     }
-
-
-    ngOnInit() {
-        this.dataService.getData()
-            .subscribe((res: any) => {
-                this.data = res;
-                console.log(this.data);
-            }, error => {
-                console.log(error);
-            });
+    ionViewDidEnter() {
+        this.createBarChart();
     }
 
+    createBarChart() {
+        this.bars = new Chart(this.barChart.nativeElement, {
+            type: 'doughnut',
+            data: {
+                labels: [
+                    'Actif',
+                    'Inactif'
+                ],
+                datasets: [{
+                    data: [10, 30],
+                    backgroundColor: [
+                        '#5DAEB3', '#826251'
+                    ],
+                }],
+
+
+
+            },
+            options: {
+                legend: {
+                    display: false
+                }}
+        });
+    }
+
+    async openModalSteps() {
+        const modal = await this.modalController.create({
+            component: StatStepPage,
+        });
+        return await modal.present();
+    }
+
+    async openModalDist() {
+        const modal = await this.modalController.create({
+            component: StatDistPage,
+        });
+        return await modal.present();
+    }
+
+    async openModalKal() {
+        const modal = await this.modalController.create({
+            component: StatKalPage,
+        });
+        return await modal.present();
+    }
 
     gyro(time) {
-       
-        this.geolocation.getCurrentPosition().then((resp) => {
-        }).catch((error) => {
+
+        this.geolocation.getCurrentPosition().then((resp) => {}).catch((error) => {
             this.accuracy = 'error';
             this.long = 'error';
             this.lat = 'error';
             this.speed = 'error';
         });
 
-        const watch = this.geolocation.watchPosition();
+        let watch = this.geolocation.watchPosition();
+
         watch.subscribe((data) => {
             this.speed = data.coords.speed;
             this.lat = data.coords.latitude;
@@ -3787,12 +3814,10 @@ export class HomePage implements OnInit {
             this.accuracy = data.coords.accuracy;
         });
 
-       
-        const options: GyroscopeOptions = {
-            frequency: 50
-        };
 
-        this.gyroscope.getCurrent(options).then().catch();
+
+        this.gyroscope.getCurrent({frequency: time}).then().catch();
+
 
         this.gyroscope.watch().subscribe((orientation: GyroscopeOrientation) => {
             this.x = orientation.x;
@@ -3805,8 +3830,7 @@ export class HomePage implements OnInit {
 
         this.deviceMotion.getCurrentAcceleration().then().catch();
 
-        // Data send by the accelerometer every 50 ms
-        this.deviceMotion.watchAcceleration({frequency: 50}).subscribe((acceleration: DeviceMotionAccelerationData) => {
+        this.deviceMotion.watchAcceleration({frequency: time}).subscribe((acceleration: DeviceMotionAccelerationData) => {
             this.accX = acceleration.x;
             this.accZ = acceleration.z;
             this.accY = acceleration.y;
@@ -3817,7 +3841,6 @@ export class HomePage implements OnInit {
 
         setInterval(() => {
             this.position(this.accX, this.accY, this.accZ);
-            // Define the max and the min of acceleration data on each axe
             if (this.minX > this.accX) {
                 this.minX = this.accX;
             }
@@ -3890,10 +3913,10 @@ export class HomePage implements OnInit {
                         const et = Math.sqrt((somme / (this.Array.length - 1)));
                         this.affETX = et;
 
-                        // Calculation of step
-                        if (i !== (this.Array.length - 1) && (this.Array[i].accX < et || this.Array[i].accX > (et * -1))) {
-                            if (this.Array[i].accX >= treshold && this.Array[a].accX <= treshold) {
-                                this.stepValid++;
+
+                        if (i !== (this.Array.length - 1) && (this.Array[i]["accX"] < et || this.Array[i]["accX"] > (et * -1))) {
+                            if (this.Array[i]["accX"] >= treshold && this.Array[a]["accX"] <= treshold) {
+                                stepValid++;
                             }
                         }
                     }
@@ -3927,13 +3950,13 @@ export class HomePage implements OnInit {
                         let a = i + 1;
                         const et = Math.sqrt((somme / (this.Array.length - 1)));
                         this.affETY = et;
-                        // Calculation of step
-                        if (i !== (this.Array.length - 1) && (this.Array[i].accY < et || this.Array[i].accY > (et * -1))) {
-                            if (this.Array[i].accY >= treshold && this.Array[a].accY <= treshold) {
-                                this.stepValid++;
+                        if (i !== (this.Array.length - 1) && (this.Array[i]["accY"] < et || this.Array[i]["accY"] > (et * -1))) {
+                            if (this.Array[i]["accY"] >= treshold && this.Array[a]["accY"] <= treshold) {
+                                stepValid++;
                             }
                         }
                     }
+
                     if ( this.stepStatus ) {
                         if (stepValid <= 3 && stepValid >= 1){
                             this.step = (Number(this.step) + Number(stepValid));
@@ -3963,24 +3986,22 @@ export class HomePage implements OnInit {
                         let a = i + 1;
                         const et = Math.sqrt((somme / (this.Array.length - 1)));
                         this.affETZ = et;
-                        // Calculation of step
-                        if (i !== (this.Array.length - 1) && (this.Array[i].accZ < et || this.Array[i].accZ > (et * -1))) {
-                            if (this.Array[i].accZ >= treshold && this.Array[a].accZ <= treshold) {
-                                this.stepValid++;
+                        if (i !== (this.Array.length - 1) && (this.Array[i]["accZ"] < et || this.Array[i]["accZ"] > (et * -1))) {
+                            if (this.Array[i]["accZ"] >= treshold && this.Array[a]["accZ"] <= treshold) {
+                                stepValid++;
                             }
                         }
                     }
-                }
-                // Verification of validstep
-                if (this.stepStatus) {
-                    if (this.stepValid <= 3 && this.stepValid >= 1) {
-                        this.step = (Number(this.step) + Number(this.stepValid));
+                    if ( this.stepStatus ) {
+                        if (stepValid <= 3 && stepValid >= 1) {
+                            this.step = (Number(this.step) + Number(stepValid));
+                        } else {
+                            this.stepStatus = false;
+                        }
                     } else {
-                        this.stepStatus = false;
-                    }
-                } else {
-                    if (this.stepValid <= 3 && this.stepValid >= 1) {
-                        this.stepStatus = true;
+                        if (stepValid <= 3 && stepValid >= 1) {
+                            this.stepStatus = true;
+                        }
                     }
                 }
 
@@ -4002,75 +4023,13 @@ export class HomePage implements OnInit {
         }, (time * 20));
     }
 
+
     position(accX, accY, accZ) {
         this.positionX = Number(accX * 0.5 * 0.01) + Number(this.positionX) + Number(accX * 0.01);
         this.positionY = Number(accY * 0.5 * 0.01) + Number(this.positionY) + Number(accY * 0.01);
         this.positionZ = Number(accZ * 0.5 * 0.01) + Number(this.positionZ) + Number(accZ * 0.01);
     }
 
-    createBarChart() {
-        const limitDatas = this.jsonStats.length;
-        const datasArray = [];
-        const indexArray = [];
-        let i;
-        console.log('Nb datas:' + limitDatas);
-
-        for (i = 0; i < limitDatas; i++) {
-            datasArray[i] = this.jsonStats[i].data.steps;
-            indexArray[i] = i;
-        }
-        console.log(i);
-        console.log(datasArray[i - 1]);
-        this.lastSteps = datasArray[i - 1];
-        console.log('Pas:' + this.lastSteps);
-        this.bars = new Chart(this.barChart.nativeElement, {
-            type: 'doughnut',
-            data: {
-                labels: [
-                    'Actif',
-                    'Inactif'
-                ],
-                datasets: [{
-                    data: datasArray,
-                    backgroundColor: [
-                        '#5DAEB3', '#826251'
-                    ],
-                }],
-
-
-            },
-            options: {
-                legend: {
-                    display: false
-                }
-            }
-        });
-    }
-
-    ionViewDidEnter() {
-        this.createBarChart();
-    }
-
-    async openModalSteps() {
-        const modal = await this.modalController.create({
-            component: StatStepPage,
-        });
-        return await modal.present();
-    }
-
-    async openModalDist() {
-        const modal = await this.modalController.create({
-            component: StatDistPage,
-        });
-        return await modal.present();
-    }
-
-    async openModalKal() {
-        const modal = await this.modalController.create({
-            component: StatKalPage,
-        });
-        return await modal.present();
-    }
 
     calculKal() {
         // this.stepvalid;
