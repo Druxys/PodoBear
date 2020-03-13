@@ -50,7 +50,7 @@ export class HomePage {
 
     public maxZ: number;
     public minZ: number;
-    
+
     public speeds: number;
 
     public stride: number;
