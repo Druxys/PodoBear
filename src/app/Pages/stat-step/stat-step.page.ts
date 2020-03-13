@@ -45,12 +45,12 @@ export class StatStepPage implements OnInit {
                 }],
 
 
-
             },
             options: {
                 legend: {
                     display: false
-                }}
+                }
+            }
         });
     }
 

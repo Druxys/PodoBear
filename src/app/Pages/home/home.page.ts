@@ -1,18 +1,20 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Chart} from 'chart.js';
 import {ModalController} from '@ionic/angular';
-import { StatStepPage } from '../stat-step/stat-step.page';
+import {StatStepPage} from '../stat-step/stat-step.page';
 import {StatDistPage} from '../stat-dist/stat-dist.page';
 import {StatKalPage} from '../stat-kal/stat-kal.page';
 import { Plugins } from '@capacitor/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
-import { Device } from '@ionic-native/device/ngx';
+import {Device} from '@ionic-native/device/ngx';
 import {DeviceMotion, DeviceMotionAccelerationData} from '@ionic-native/device-motion/ngx';
 import {Result} from '../../Models/Result';
 import {Data} from '../../Models/Data';
 import {Gyroscope, GyroscopeOptions, GyroscopeOrientation} from '@ionic-native/gyroscope/ngx';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+import {Geolocation} from '@ionic-native/geolocation/ngx';
+
+import {DataService} from '../../Service/data.service';
 
 const apiUrl = 'https://185.216.25.16:5000/datas';
 
@@ -25,10 +27,13 @@ const { App, BackgroundTask } = Plugins;
     styleUrls: ['home.page.scss'],
     providers: [Gyroscope]
 })
-export class HomePage {
+export class HomePage implements OnInit {
+
+
     // @ts-ignore
     @ViewChild('barChart') barChart;
 
+    data: any;
     bars: any;
     colorArray: any;
 
@@ -78,7 +83,8 @@ export class HomePage {
     };
 
     constructor(public modalController: ModalController, private device: Device, private deviceMotion: DeviceMotion,
-                private gyroscope: Gyroscope, private api: HttpClient, private geolocation: Geolocation) {
+                private gyroscope: Gyroscope, private api: HttpClient, private geolocation: Geolocation,
+                private dataService: DataService) {
         this.minX = 0;
         this.maxX = 0;
         this.minY = 0;
@@ -96,32 +102,55 @@ export class HomePage {
             }
         });
     }
+
+
+    ngOnInit() {
+        this.dataService.getDatas()
+            .subscribe((res: any) => {
+                this.data = res;
+                console.log(this.data);
+            }, error => {
+                console.log(error);
+            })
+    }
+
     ionViewDidEnter() {
         this.createBarChart();
     }
 
     createBarChart() {
+        var limitDatas = this.data.length;
+        var datasArray = [];
+        var indexArray = [];
+        var i;
+
+        for (i = 0; i < limitDatas; i++) {
+            datasArray[i] = this.data[i].positionX;
+            indexArray[i] = i;
+        }
+        console.log(datasArray);
+
         this.bars = new Chart(this.barChart.nativeElement, {
             type: 'doughnut',
             data: {
-              labels: [
-                'Actif',
-                'Inactif'
-              ],
+                labels: [
+                    'Actif',
+                    'Inactif'
+                ],
                 datasets: [{
-                    data: [10, 30],
-                  backgroundColor: [
-                    '#5DAEB3', '#826251'
-                  ],
+                    data: datasArray,
+                    backgroundColor: [
+                        '#5DAEB3', '#826251'
+                    ],
                 }],
-
 
 
             },
             options: {
                 legend: {
                     display: false
-                }}
+                }
+            }
         });
     }
 
@@ -148,7 +177,8 @@ export class HomePage {
 
     gyro(time) {
 
-        this.geolocation.getCurrentPosition().then((resp) => {}).catch((error) => {
+        this.geolocation.getCurrentPosition().then((resp) => {
+        }).catch((error) => {
             this.accuracy = 'error';
             this.long = 'error';
             this.lat = 'error';
@@ -165,9 +195,7 @@ export class HomePage {
         });
 
 
-
         this.gyroscope.getCurrent({frequency: time}).then().catch();
-
 
         this.gyroscope.watch().subscribe((orientation: GyroscopeOrientation) => {
             this.x = orientation.x;
@@ -306,7 +334,6 @@ export class HomePage {
                             }
                         }
                     }
-
                     if ( this.stepStatus ) {
                         if (stepValid <= 3 && stepValid >= 1){
                             this.step = (Number(this.step) + Number(stepValid));
